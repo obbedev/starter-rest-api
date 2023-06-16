@@ -1,9 +1,18 @@
 const express = require('express')
 const app = express()
 const db = require('@cyclic.sh/dynamodb')
+const Pool = require('pg').Pool
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+const pool = new Pool({
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASS,
+  port: process.env.DB_PORT,
+})
 
 // #############################################################################
 // This configures static hosting for files in /public that have the extensions
@@ -40,6 +49,17 @@ app.delete('/:col/:key', async (req, res) => {
   console.log(JSON.stringify(item, null, 2))
   res.json(item).end()
 })
+
+// Get a single item
+app.get('/testdb', async (req, res) => {
+  pool.query('select * from test_tabla', (error, results) => {
+    if (error) {
+      throw error
+    }
+    res.status(200).json(results.rows)
+  })
+})
+
 
 // Get a single item
 app.get('/:col/:key', async (req, res) => {
