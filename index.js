@@ -12,7 +12,7 @@ const pool = new Pool({
   database: process.env.DB_NAME,
   password: process.env.DB_PASS,
   port: process.env.DB_PORT,
-})
+});
 
 // #############################################################################
 // This configures static hosting for files in /public that have the extensions
