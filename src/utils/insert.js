@@ -10,7 +10,7 @@ export class Insert {
     constructor(tableName, values) {
         console.log(tableName)
         this.tableName = tableName;
-        this.setValues(fields);
+        this.setValues(values);
     }
     
     setValues(values){
