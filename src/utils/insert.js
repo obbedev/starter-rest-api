@@ -27,7 +27,7 @@ export class Insert {
 
     toString() {
         let query = "insert into "+this.tableName+" (";
-        let fields = Object.keys(values[0]);
+        let fields = Object.keys(this.values[0]);
         query += " "+fields.join(",")+") VALUES (";
         
         this.values.forEach((element)=>{
