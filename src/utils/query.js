@@ -8,9 +8,16 @@ export class Query {
     constructor(tableName, fields) {
         console.log(tableName)
         this.tableName = tableName;
-        this.fields = fields;
+        this.setFields(fields);
     }
     
+    setFields(fields){
+        if(fields == undefined || !fields){
+            fields = "*";
+        }
+        this.fields = fields;
+    }
+     
     setLimit(limit){
         this.limit = limit;
     }
