@@ -50,10 +50,13 @@ export const insert = async (req, res) => {
     const params = req.params;
     const table = params.table;
     const body = req.body;
-    let query = new Insert(table,[{"id":1,"name":"test"}]);
+    let insertValues = body;
+    if(!Array.isArray(insertValues)){
+        insertValues = [];
+        insertValues.push(body);
+    }
+    let query = new Insert(table,insertValues);
     console.log(query.toString());
-    res.status(200).json(body);
-    return;
     const db = getConnection();
     await db.query(query.toString(), (error, results) => {
       if (error) {
