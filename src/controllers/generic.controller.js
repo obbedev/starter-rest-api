@@ -71,8 +71,10 @@ export const update = async (req, res) => {
     const params = req.params;
     const table = params.table;
     const body = req.body;
+    const id = req.params.id;
     let updateValues = body;
     let query = new Update(table,updateValues);
+    query.setFilter = "WHERE id = '"+id+"'";;
     console.log(query.toString());
     res.status(200).json(query.toString())
     return;
