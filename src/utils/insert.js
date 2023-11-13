@@ -26,17 +26,18 @@ export class Insert {
     }
 
     toString() {
-        let query = "insert into "+this.tableName+" (";
+        let query = "INSERT INTO "+this.tableName+" (";
         let fields = Object.keys(this.values[0]);
         query += " "+fields.join(",")+") VALUES (";
-        
-        this.values.forEach((element)=>{
+
+        let sqlValues = this.values.map((element)=>{
           let elementValues = Object.values(element);
-          elementValues.forEach((elementValue)=>{
-            query += "'"+elementValue+"'";
+          elementValues = elementValues.map((item)=>{
+            return "`"+item+"`";
           });
-          query += ")";
+          return "("+elementValues.join(",")+")";
         });
+        query += sqlValues.join(",");
         
         console.log(query);
         return query;
