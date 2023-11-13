@@ -1,12 +1,6 @@
 export class Insert {
     tableName = '';
     values = [];
-  
-    fields = '';
-    limit = '';
-    offset = '';
-    filters = [];
-    filter = '';
     constructor(tableName, values) {
         console.log(tableName)
         this.tableName = tableName;
@@ -15,14 +9,6 @@ export class Insert {
     
     setValues(values){
         this.values = values;
-    }
-    
-    setFilter(filter){
-        this.filter = filter;
-    }
-
-    addFilter(filter){
-        this.filters.push(filter);
     }
 
     toString() {
