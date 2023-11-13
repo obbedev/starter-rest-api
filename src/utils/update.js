@@ -29,7 +29,7 @@ export class Update {
         });
         query += " "+result.join(",")+")";
         if(this.filter){
-          
+          query += " "+this.filter;
         }
         console.log(query);
         return query;
