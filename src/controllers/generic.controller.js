@@ -2,6 +2,7 @@ import { v4 } from "uuid";
 import { getConnection } from "../database.js";
 import { Query } from "../utils/query.js";
 import { Insert } from "../utils/insert.js";
+import { Update } from "../utils/update.js";
 
 export const getTableItem = async (req, res) => {
     const table = req.params.table
@@ -57,6 +58,24 @@ export const insert = async (req, res) => {
     }
     let query = new Insert(table,insertValues);
     console.log(query.toString());
+    const db = getConnection();
+    await db.query(query.toString(), (error, results) => {
+      if (error) {
+        throw error
+      }
+      res.status(200).json(results)
+    })
+};
+
+export const update = async (req, res) => {
+    const params = req.params;
+    const table = params.table;
+    const body = req.body;
+    let updateValues = body;
+    let query = new Update(table,updateValues);
+    console.log(query.toString());
+    res.status(200).json(query.toString())
+    return;
     const db = getConnection();
     await db.query(query.toString(), (error, results) => {
       if (error) {
