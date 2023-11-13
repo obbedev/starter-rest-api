@@ -27,9 +27,9 @@ export class Update {
         let result = Object.keys(this.values).map(item => {
           return `${item} = '${this.values[item]}'`
         });
-        query += " "+result.join(",")+")";
+        query += " "+result.join(",")+"";
         if(this.filter){
-          query += " "+this.filter;
+          query += " WHERE "+this.filter;
         }
         console.log(query);
         return query;
