@@ -33,7 +33,7 @@ export class Insert {
         let sqlValues = this.values.map((element)=>{
           let elementValues = Object.values(element);
           elementValues = elementValues.map((item)=>{
-            return "`"+item+"`";
+            return "'"+item+"'";
           });
           return "("+elementValues.join(",")+")";
         });
