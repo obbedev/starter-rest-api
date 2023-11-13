@@ -75,6 +75,8 @@ export const update = async (req, res) => {
     let updateValues = body;
     let query = new Update(table,updateValues);
     query.setFilter("WHERE id = '"+id+"'");
+    res.status(200).json(query.toString())
+    return;
     const db = getConnection();
     await db.query(query.toString(), (error, results) => {
       if (error) {
