@@ -9,6 +9,6 @@ import {
 router.get("/:table", getTableItems);
 router.get("/:table/:id", getTableItem);
 router.post("/:table", insert);
-router.put("/:table", update);
+router.put("/:table/:id", update);
 
 export default router;
