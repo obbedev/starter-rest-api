@@ -49,9 +49,15 @@ export const getTableItems = async (req, res) => {
 export const insert = async (req, res) => {
     const params = req.params;
     const table = params.table;
-
+    
     let query = new Insert(table,[{"id":1,"name":"test"}]);
     console.log(query.toString());
-    res.status(200).json({"message":query.toString()})
+    const db = getConnection();
+    await db.query(query.toString(), (error, results) => {
+      if (error) {
+        throw error
+      }
+      res.status(200).json(results)
+    })
 };
 
