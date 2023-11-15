@@ -7,15 +7,16 @@ export const isLogged = async (req, res, next) => {
       if(token && (typeof token === 'string' || token instanceof String)){
         let query = new Query('api_user','id');
         query.setFilter("token = '"+token+"'");
-         res.status(401).json({
-            error: token,
-            headers:query.toString()
-        });
         const db = getConnection();
         await db.query(query.toString(), (error, results) => {
           if (error) {      
             throw error
           }
+        res.status(401).json({
+            error: token,
+            headers:query.toString(),
+            results
+        });
           console.log("current request response",results);
           if(results.rows.length>0){
             next();
