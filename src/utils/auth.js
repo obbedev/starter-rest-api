@@ -9,13 +9,11 @@ export const isLogged = async (req, res, next) => {
         query.setFilter("token = '"+token+"'");
         const db = getConnection();
         await db.query(query.toString(), (error, results) => {
-          if (error) {      
-            throw error
-          }
         res.status(401).json({
             error: token,
             headers:query.toString(),
-            results
+            results,
+            error
         });
           console.log("current request response",results);
           if(results.rows.length>0){
