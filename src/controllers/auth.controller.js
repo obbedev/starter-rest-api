@@ -6,16 +6,24 @@ import { Update } from "../utils/update.js";
 
 export const login = async (req, res) => {
     const body = req.body;
-    let query = new Query('api_user','id');
+    let query = new Query('api_user','id,token');
     query.setFilter("email = '"+body.email+"' and password = '"+body.password+"'");
-
-    res.status(200).json(query.toString())
     const db = getConnection();
     await db.query(query.toString(), (error, results) => {
       if (error) {      
         throw error
       }
-      res.status(200).json(results.rows[0])
+      if(results.rows && results.rows.length>0){
+          let user = results.rows[0];
+          let token = "";
+          if(user.token){
+             token = user.token; 
+          }else{
+              //generate token - TODO secure
+              token = "";
+          }
+          res.status(200).json({token:token})
+      }
     })
 };
 
