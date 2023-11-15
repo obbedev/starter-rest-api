@@ -1,4 +1,5 @@
 import { Query } from "./query.js";
+import { getConnection } from "../database.js";
 
 export const isLogged = async (req, res, next) => {
     try {
@@ -9,9 +10,9 @@ export const isLogged = async (req, res, next) => {
         query.setFilter("token = '"+token+"'");
         const db = getConnection();
         await db.query("select id from api_user", (error, results) => {
-        res.status(200).json({
-            results
-        });
+           res.status(200).json({
+                results
+            });
           console.log("current request response",results);
           if(results.rows.length>0){
             next();
