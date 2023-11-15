@@ -25,9 +25,10 @@ export const isLogged = async (req, res, next) => {
       }else{
         throw "Could not get token";
       }
-    } catch {
+    } catch (e) {
       res.status(401).json({
-        error: "Error else"
+        error: "Error else",
+        message:e
       });
     }
 }
