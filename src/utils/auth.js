@@ -9,7 +9,10 @@ export const isLogged = async (req, res, next) => {
         query.setFilter("token = '"+token+"'");
         const db = getConnection();
         await db.query(query.toString(), (error, results) => {
-          if(results.rows && results.rows.length>0){
+          res.status(401).json({
+            results: results
+          });
+          if(results && results.rows && results.rows.length>0){
             next();
           }else{
             throw new Error('Invalid user ID');
