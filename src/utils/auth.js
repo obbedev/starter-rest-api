@@ -19,11 +19,11 @@ export const isLogged = async (req, res, next) => {
           if(results.rows.length>0){
             next();
           }else{
-            throw 'Invalid user ID';
+            throw new Error('Invalid user ID');
           }
         })
       }else{
-        throw "Could not get token";
+        throw new Error("Could not get token");
       }
     } catch (e) {
       res.status(401).json({
