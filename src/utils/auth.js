@@ -11,7 +11,7 @@ export const isLogged = async (req, res, next) => {
           if (error) {      
             throw error
           }
-          if(results.rows.length){
+          if(results.rows.length>0){
             next();
           }else{
             throw 'Invalid user ID';
