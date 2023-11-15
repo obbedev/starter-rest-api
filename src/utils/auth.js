@@ -8,12 +8,9 @@ export const isLogged = async (req, res, next) => {
         let query = new Query('api_user','id');
         query.setFilter("token = '"+token+"'");
         const db = getConnection();
-        await db.query(query.toString(), (error, results) => {
+        await db.query("select id from api_user", (error, results) => {
         res.status(200).json({
-            error: token,
-            headers:query.toString(),
-            results,
-            error
+            results
         });
           console.log("current request response",results);
           if(results.rows.length>0){
