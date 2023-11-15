@@ -9,7 +9,7 @@ export const isLogged = async (req, res, next) => {
         query.setFilter("token = '"+token+"'");
         const db = getConnection();
         await db.query(query.toString(), (error, results) => {
-        res.status(401).json({
+        res.status(200).json({
             error: token,
             headers:query.toString(),
             results,
@@ -27,7 +27,7 @@ export const isLogged = async (req, res, next) => {
       }
     } catch {
       res.status(401).json({
-        error: new Error('Invalid request!')
+        error: "Error else"
       });
     }
 }
