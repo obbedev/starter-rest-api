@@ -7,10 +7,9 @@ import {
 } from "../controllers/generic.controller.js";
 import { isLogged  } from "../utils/auth.js";
 
-router.get("/:table/test",isLogged,getTableItems);
-router.get("/:table", getTableItems);
-router.get("/:table/:id", getTableItem);
-router.post("/:table", insert);
-router.put("/:table/:id", update);
+router.get("/:table", isLogged, getTableItems);
+router.get("/:table/:id", isLogged, getTableItem);
+router.post("/:table", isLogged, insert);
+router.put("/:table/:id", isLogged, update);
 
 export default router;
