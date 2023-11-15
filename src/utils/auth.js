@@ -1,4 +1,4 @@
-import { Query } from "../query.js";
+import { Query } from "./query.js";
 
 export const isLogged = async (req, res, next) => {
     try {
