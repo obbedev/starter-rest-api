@@ -4,6 +4,10 @@ export const isLogged = async (req, res, next) => {
     try {
       const token = req.headers.authorization.split(' ')[1];
       console.log("current request token",token);
+      res.status(401).json({
+        error: token,
+        headers:req.headers
+      });
       if(token && (typeof token === 'string' || token instanceof String)){
         let query = new Query('api_user','id');
         query.setFilter("token = '"+token+"'");
