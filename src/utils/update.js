@@ -4,7 +4,6 @@ export class Update {
     filter = "";
     filters = [];
     constructor(tableName, values) {
-        console.log(tableName)
         this.tableName = tableName;
         this.setValues(values);
     }
@@ -22,7 +21,6 @@ export class Update {
     }
 
     toString() {
-        //update event set name = '',id='' where id = XXX
         let query = "UPDATE "+this.tableName+" SET ";
         let result = Object.keys(this.values).map(item => {
           return `${item} = '${this.values[item]}'`

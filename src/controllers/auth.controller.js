@@ -3,13 +3,14 @@ import { getConnection } from "../database.js";
 import { Query } from "../utils/query.js";
 import { Insert } from "../utils/insert.js";
 import { Update } from "../utils/update.js";
+import { hash } from "../utils/helper.js";
 
 export const login = async (req, res) => {
     const body = req.body;
     let query = new Query('api_user','id,token');
     query.setFilter("email = '"+body.email+"' and password = '"+body.password+"'");
     const db = getConnection();
-    await db.query(query.toString(), (error, results) => {
+    await db.query(query.toString(), async (error, results) => {
       if (error) {      
         throw error
       }
@@ -19,8 +20,16 @@ export const login = async (req, res) => {
           if(user.token){
              token = user.token; 
           }else{
-              //generate token - TODO secure
-              token = "";
+              token = hash(body.password);
+              let update = new Update('api_user');
+              update.setValues({"token":token});
+              update.setFilter("id = '"+user.id+"'");
+              const db = getConnection();
+              await db.query(update.toString(), (error, results) => {
+                if (error) {
+                  throw error
+                }
+              })
           }
           res.status(200).json({token:token})
       }
