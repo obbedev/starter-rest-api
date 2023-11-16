@@ -53,33 +53,30 @@ export const signUp = async (req, res) => {
   query.setFilter("email = '"+body.email+"'");
   let userExist = false;
   const db = getConnection();
-  await db.query(query.toString(), (error, results) => {
+  await db.query(query.toString(), async (error, results) => {
     if (error) {
       throw error
     }
-    console.log("existe email? ",results.rows);
+    console.log("existe email?",results.rows);
     if(results.rows.length>0){
-      userExist = true;
+      console.log("existe email");
+      res.status(400).json({error:"Ya existe un usuario con este email"});
+    }else{
+      console.log("no existe email");
+      //TODO validate email, create service
+      let hashPassword = await hash(body.password);
+      let insertValues = [
+        {email:body.email,password:hashPassword}
+      ]; 
+      let insert = new Insert('api_user',insertValues);
+      await db.query(insert.toString(), (error, results) => {
+        if (error) {
+          throw error
+        }
+        res.status(200).json(results)
+      })
     }
   })
-  if(userExist){
-    console.log("existe email ");
-    res.status(400).json({error:"Ya existe un usuario con este email"});
-  }else{
-    console.log("no existe email ");
-    //TODO validate email, create service
-    let hashPassword = await hash(body.password);
-    let insertValues = [
-      {email:body.email,password:hashPassword}
-    ]; 
-    let insert = new Insert('api_user',insertValues);
-    await db.query(insert.toString(), (error, results) => {
-      if (error) {
-        throw error
-      }
-      res.status(200).json(results)
-    })
-  }
 };
 
 export const insert = async (req, res) => {
