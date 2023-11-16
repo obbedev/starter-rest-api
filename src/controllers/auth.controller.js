@@ -25,7 +25,7 @@ export const login = async (req, res) => {
           if(user.token){
              token = user.token; 
           }else{
-              token = hash(body.password);
+              token = await hash(body.password);
               let update = new Update('api_user');
               update.setValues({"token":token});
               update.setFilter("id = '"+user.id+"'");
