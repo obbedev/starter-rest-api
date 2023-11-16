@@ -63,6 +63,7 @@ export const signUp = async (req, res) => {
     }
   })
   if(userExist){
+    console.log("existe email ");
     res.status(400).json({error:"Ya existe un usuario con este email"});
   }else{
     console.log("no existe email ");
