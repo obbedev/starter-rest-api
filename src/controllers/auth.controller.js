@@ -57,7 +57,7 @@ export const signUp = async (req, res) => {
     if (error) {
       throw error
     }
-    console.log("existe email? "+results.rows);
+    console.log("existe email? ",results.rows);
     if(results.rows.length>0){
       userExist = true;
     }
@@ -65,6 +65,7 @@ export const signUp = async (req, res) => {
   if(userExist){
     res.status(400).json({error:"Ya existe un usuario con este email"});
   }else{
+    console.log("no existe email ");
     //TODO validate email, create service
     let hashPassword = await hash(body.password);
     let insertValues = [
