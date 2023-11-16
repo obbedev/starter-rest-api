@@ -1,3 +1,5 @@
+import { Filter } from "./filter.js";
+
 export class Query {
     tableName = '';
     fields = '';
@@ -44,6 +46,16 @@ export class Query {
 
         if(this.filter){
             query += " where " + this.filter;
+        }else if(this.filters.length>0){
+            query += " where ";
+            this.filters.forEach((filter)=>{
+                query += " ";
+                if(filter instanceof Filter){
+                    query += filter.getFilterString();
+                }else{
+                    query += filter;
+                }
+            });
         }
         if(this.limit){
             query += " LIMIT "+this.limit;

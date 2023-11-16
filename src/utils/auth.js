@@ -1,12 +1,15 @@
 import { Query } from "./query.js";
 import { getConnection } from "../database.js";
+import { Filter } from "./filter.js";
 
 export const isLogged = async (req, res, next) => {
     try {
       const token = req.headers.authorization.split(' ')[1];
       if(token && (typeof token === 'string' || token instanceof String)){
         let query = new Query('api_user','id');
-        query.setFilter("token = '"+token+"'");
+        let filter = new Filter();
+        filter.addEqualFilter("token",token);
+        query.addFilter(filter);
         const db = getConnection();
         await db.query(query.toString(), (error, results) => {
           if(results && results.rows && results.rows.length>0){

@@ -12,8 +12,12 @@ export class Filter {
     }
   }
 
-  addFilter(field, value, operator = '=') {
+  addOperatorFilter(field, value, operator = '=') {
     this.filters.push({ field, value, operator });
+  }
+
+  addEqualFilter(field, value) {
+    this.addOperatorFilter(field, value, '=');
   }
 
   getFilterString() {
