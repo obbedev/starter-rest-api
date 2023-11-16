@@ -38,6 +38,8 @@ export const login = async (req, res) => {
               })
           }
           res.status(200).json({token:token})
+      }else{
+        res.status(401).json({error:"Invalid credentials"})
       }
       } catch (error) {
         res.status(500).json({error})
