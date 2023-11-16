@@ -69,7 +69,7 @@ export const signUp = async (req, res) => {
     let insertValues = [
       {email:body.email,password:hashPassword}
     ]; 
-    let insert = new Insert(table,insertValues);
+    let insert = new Insert('api_user',insertValues);
     await db.query(insert.toString(), (error, results) => {
       if (error) {
         throw error
