@@ -57,6 +57,7 @@ export const signUp = async (req, res) => {
     if (error) {
       throw error
     }
+    console.log("existe email? "+results.rows);
     if(results.rows.length>0){
       userExist = true;
     }
