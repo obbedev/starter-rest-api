@@ -17,7 +17,6 @@ export const login = async (req, res) => {
         res.status(500).json({error});
         throw error
       }
-      console.log(results)
       try {
         if(results.rows && results.rows.length>0){
           let user = results.rows[0];
@@ -26,6 +25,7 @@ export const login = async (req, res) => {
              token = user.token; 
           }else{
               token = await hash(body.password);
+              console.log(token);
               let update = new Update('api_user');
               update.setValues({"token":token});
               update.setFilter("id = '"+user.id+"'");
