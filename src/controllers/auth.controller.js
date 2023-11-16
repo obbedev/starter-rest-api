@@ -10,11 +10,16 @@ export const login = async (req, res) => {
     let query = new Query('api_user','id,token');
     query.setFilter("email = '"+body.email+"' and password = '"+body.password+"'");
     const db = getConnection();
+    console.log(query);
     await db.query(query.toString(), async (error, results) => {
       if (error) {      
+        console.log(error)
+        res.status(500).json({error});
         throw error
       }
-      if(results.rows && results.rows.length>0){
+      console.log(results)
+      try {
+        if(results.rows && results.rows.length>0){
           let user = results.rows[0];
           let token = "";
           if(user.token){
@@ -29,9 +34,13 @@ export const login = async (req, res) => {
                 if (error) {
                   throw error
                 }
+                res.status(200).json({token:token})
               })
           }
           res.status(200).json({token:token})
+      }
+      } catch (error) {
+        res.status(500).json({error})
       }
     })
 };

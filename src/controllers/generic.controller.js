@@ -14,11 +14,13 @@ export const getTableItem = async (req, res) => {
 
     const db = getConnection();
     await db.query(query.toString(), (error, results) => {
-      if (error) {      
+      if (error) {     
+        console.log(error) 
         throw error
       }
-      res.status(200).json(results.rows[0])
-    })
+      console.log(results);
+      res.status(200).json(results.rows[0]);
+    });
 };
 
 export const getTableItems = async (req, res) => {
@@ -38,8 +40,8 @@ export const getTableItems = async (req, res) => {
         query.setOffset(offset);
     }
 
-    const db = getConnection();
-    await db.query(query.toString(), (error, results) => {
+    const db = await getConnection();
+    await db.query(query.toString(), async (error, results) => {
       if (error) {
         throw error
       }

@@ -8,7 +8,6 @@ export class Query {
     filters = [];
     filter = '';
     constructor(tableName, fields) {
-        console.log(tableName)
         this.tableName = tableName;
         this.setFields(fields);
     }
@@ -63,6 +62,7 @@ export class Query {
         if(this.offest){
             query += " offset "+this.offest;
         }
+        console.log(query)
 
         return query;
     }

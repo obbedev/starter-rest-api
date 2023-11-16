@@ -4,7 +4,7 @@ import { Filter } from "./filter.js";
 
 export const isLogged = async (req, res, next) => {
     try {
-      const token = req.headers.authorization.split(' ')[1];
+      const token = req?.headers?.authorization?.split(' ')[1];
       if(token && (typeof token === 'string' || token instanceof String)){
         let query = new Query('api_user','id');
         let filter = new Filter();
@@ -12,6 +12,7 @@ export const isLogged = async (req, res, next) => {
         query.addFilter(filter);
         const db = getConnection();
         await db.query(query.toString(), (error, results) => {
+          console.log(results)
           if(results && results.rows && results.rows.length>0){
             next();
           }else{
@@ -24,6 +25,7 @@ export const isLogged = async (req, res, next) => {
         throw new Error("Could not get token");
       }
     } catch (e) {
+      console.log(e)
       res.status(401).json({
         error: 'Invalid user ID'
       });
