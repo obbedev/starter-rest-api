@@ -10,7 +10,6 @@ export const login = async (req, res) => {
     let query = new Query('api_user','id,token');
     query.setFilter("email = '"+body.email+"' and password = '"+body.password+"'");
     const db = getConnection();
-    console.log(query);
     await db.query(query.toString(), async (error, results) => {
       if (error) {      
         console.log(error)
@@ -25,7 +24,6 @@ export const login = async (req, res) => {
              token = user.token; 
           }else{
               token = await hash(body.password);
-              console.log(token);
               let update = new Update('api_user');
               update.setValues({"token":token});
               update.setFilter("id = '"+user.id+"'");
@@ -47,30 +45,38 @@ export const login = async (req, res) => {
     })
 };
 
-export const getTableItems = async (req, res) => {
-    const params = req.params;
-    const table = params.table;
+export const signUp = async (req, res) => {
+  const body = req.body;
 
-    let query = new Query(table,req.query.fields);
-    const page = parseInt(req.query.page) || 1;
-    const size = parseInt(req.query.page_size) || 10;
-    const offset = (page - 1) * size;
-    const limit = size;
-
-    if(limit){
-        query.setLimit(limit);
+  //check if exists the user
+  let query = new Query('api_user','id,token');
+  query.setFilter("email = '"+body.email+"'");
+  let userExist = false;
+  const db = getConnection();
+  await db.query(query.toString(), (error, results) => {
+    if (error) {
+      throw error
     }
-    if(offset){
-        query.setOffset(offset);
+    if(results.rows.length>0){
+      userExist = true;
     }
-
-    const db = getConnection();
-    await db.query(query.toString(), (error, results) => {
+  })
+  if(userExist){
+    res.status(400).json({error:"Ya existe un usuario con este email"});
+  }else{
+    //TODO validate email, create service
+    let hashPassword = await hash(body.password);
+    let insertValues = [
+      {email:body.email,password:hashPassword}
+    ]; 
+    let insert = new Insert(table,insertValues);
+    await db.query(insert.toString(), (error, results) => {
       if (error) {
         throw error
       }
-      res.status(200).json(results.rows)
+      res.status(200).json(results)
     })
+  }
 };
 
 export const insert = async (req, res) => {
