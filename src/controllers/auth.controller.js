@@ -8,8 +8,8 @@ import { hash } from "../utils/helper.js";
 export const login = async (req, res) => {
     const body = req.body;
     let query = new Query('api_user','id,token');
-    let hashPassword = await hashPassword(body.password);
-    query.setFilter("email = '"+body.email+"' and password = '"+hashPassword+"'");
+    let hashedPassword = await hashPassword(body.password);
+    query.setFilter("email = '"+body.email+"' and password = '"+hashedPassword+"'");
     const db = getConnection();
     await db.query(query.toString(), async (error, results) => {
       if (error) {      
