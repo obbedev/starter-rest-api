@@ -48,7 +48,7 @@ export class AuthService{
                 throw new Error("You have already an account");
             }else{
                 //TODO validate email
-                let hashedPassword = await hashPassword(data.password);
+                let hashedPassword = await this.hashPassword(data.password);
                 let insertValues = [
                   {email:data.email,password:hashedPassword}
                 ]; 
