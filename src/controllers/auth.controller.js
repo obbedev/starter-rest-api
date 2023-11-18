@@ -13,6 +13,7 @@ export const login = async (req, res) => {
       let token = await authService.login(body.email,body.password);
       res.status(200).json({token:token})
     } catch (error) {
+      console.log(error);
       if(error?.code == 401){
         res.status(401).json({error:"Invalid credentials"})
       }
