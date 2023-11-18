@@ -10,7 +10,7 @@ export const login = async (req, res) => {
     const body = req.body;
     try {
       const authService = new AuthService();
-      let token = authService.login(body.email,body.password);
+      let token = await authService.login(body.email,body.password);
       res.status(200).json({token:token})
     } catch (error) {
       if(error?.code == 401){
