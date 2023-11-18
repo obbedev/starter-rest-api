@@ -27,7 +27,17 @@ export class Update {
         });
         query += " "+result.join(",")+"";
         if(this.filter){
-          query += " WHERE "+this.filter;
+          query += " WHERE " + this.filter;
+        }else if(this.filters.length>0){
+            query += " WHERE ";
+            this.filters.forEach((filter)=>{
+                query += " ";
+                if(filter instanceof Filter){
+                    query += filter.getFilterString();
+                }else{
+                    query += filter;
+                }
+            });
         }
         console.log(query);
         return query;

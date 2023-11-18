@@ -3,6 +3,10 @@ export class Filter {
     this.filters = [];
     this.logicalOperator = 'AND';
   }
+  
+  addFilter(condition){
+    this.filters.push(condition);
+  }
 
   setLogicalOperator(operator) {
     if (operator.toUpperCase() === 'AND' || operator.toUpperCase() === 'OR') {
@@ -26,6 +30,9 @@ export class Filter {
     }
 
     const filterClauses = this.filters.map(filter => {
+      if(filter instanceof Filter){
+        return "( "+filter.getFilterString()+" )";
+      }
       return `${filter.field} ${filter.operator} '${filter.value}'`;
     });
 

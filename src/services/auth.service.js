@@ -7,7 +7,7 @@ import { Filter } from "../database/operation/filter.js";
 
 export class AuthService{
     async login(email,password){
-        if(this.validatePassword(password)){
+        if(password){
             let query = new Query('api_user','id,token');
             let hashedPassword = await this.hashPassword(password);
             let filter = new Filter();
@@ -41,7 +41,7 @@ export class AuthService{
                 throw error
             }
         }else{
-            throw new Error("Password must be at least 8 characters long, at least one letter and at least one number");
+            throw new Error("Password is required");
         }
     }
 
