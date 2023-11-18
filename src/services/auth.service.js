@@ -7,7 +7,7 @@ import { hash } from "../utils/helper.js";
 export class AuthService{
     async login(email,password){
         let query = new Query('api_user','id,token');
-        let hashedPassword = await hashPassword(password);
+        let hashedPassword = await this.hashPassword(password);
         query.setFilter("email = '"+email+"' and password = '"+hashedPassword+"'");
         const db = getConnection();
         try {
