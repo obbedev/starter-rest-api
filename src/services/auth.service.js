@@ -3,12 +3,16 @@ import { Query } from "../utils/query.js";
 import { Insert } from "../utils/insert.js";
 import { Update } from "../utils/update.js";
 import { hash } from "../utils/helper.js";
+import { Filter } from "../utils/filter.js";
 
 export class AuthService{
     async login(email,password){
         let query = new Query('api_user','id,token');
         let hashedPassword = await this.hashPassword(password);
-        query.setFilter("email = '"+email+"' and password = '"+hashedPassword+"'");
+        let filter = new Filter();
+        filter.addEqualFilter('email',email);
+        filter.addEqualFilter('password',hashedPassword);
+        query.addFilter(filter);
         const db = getConnection();
         try {
             let result = await db.query(query.toString());
@@ -40,7 +44,9 @@ export class AuthService{
     async signUp(data){
         try {
             let query = new Query('api_user','id');
-            query.setFilter("email = '"+data.email+"'");
+            let filter = new Filter();
+            filter.addEqualFilter('email',data.email);
+            query.addFilter(filter);
             const db = getConnection();
             let results = await db.query(query.toString());
             if(results.rows.length>0){
