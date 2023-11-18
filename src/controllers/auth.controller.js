@@ -1,9 +1,3 @@
-import { v4 } from "uuid";
-import { getConnection } from "../database.js";
-import { Query } from "../utils/query.js";
-import { Insert } from "../utils/insert.js";
-import { Update } from "../utils/update.js";
-import { hash } from "../utils/helper.js";
 import { AuthService } from "../services/auth.service.js";
 
 export const login = async (req, res) => {
@@ -17,7 +11,7 @@ export const login = async (req, res) => {
       if(error?.code == 401){
         res.status(401).json({error:"Invalid credentials"})
       }
-      res.status(500).json({error})
+      res.status(500).json({error:error.message})
     }
 };
 
@@ -29,11 +23,6 @@ export const signUp = async (req, res) => {
     res.status(200).json({message:"User created"});
   } catch (error) {
     console.log("Error creating account:",error);
-    res.status(500).json({message:error.message})
+    res.status(500).json({eror:error.message})
   }
-};
-
-export const hashPassword = async (password) => {
-  let hashPassword = await hash(password);
-  return hashPassword;
 };
