@@ -1,5 +1,5 @@
 import { v4 } from "uuid";
-import { getConnection } from "../database.js";
+import { getConnection } from "../database/database.js";
 
 export const getTasks = (req, res) => {
 

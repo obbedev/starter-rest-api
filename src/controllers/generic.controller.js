@@ -1,5 +1,5 @@
 import { v4 } from "uuid";
-import { getConnection } from "../database.js";
+import { getConnection } from "../database/database.js";
 import { Query } from "../utils/query.js";
 import { Insert } from "../utils/insert.js";
 import { Update } from "../utils/update.js";

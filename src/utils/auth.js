@@ -1,5 +1,5 @@
 import { Query } from "./query.js";
-import { getConnection } from "../database.js";
+import { getConnection } from "../database/database.js";
 import { Filter } from "./filter.js";
 
 export const isLogged = async (req, res, next) => {
