@@ -8,7 +8,8 @@ import { hash } from "../utils/helper.js";
 export const login = async (req, res) => {
     const body = req.body;
     let query = new Query('api_user','id,token');
-    query.setFilter("email = '"+body.email+"' and password = '"+body.password+"'");
+    let hashPassword = await hashPassword(body.password);
+    query.setFilter("email = '"+body.email+"' and password = '"+hashPassword+"'");
     const db = getConnection();
     await db.query(query.toString(), async (error, results) => {
       if (error) {      
@@ -51,18 +52,15 @@ export const signUp = async (req, res) => {
   //check if exists the user
   let query = new Query('api_user','id,token');
   query.setFilter("email = '"+body.email+"'");
-  let userExist = false;
   const db = getConnection();
   await db.query(query.toString(), async (error, results) => {
     if (error) {
       throw error
     }
-    console.log("existe email?",results.rows);
     if(results.rows.length>0){
       console.log("existe email");
       res.status(400).json({error:"Ya existe un usuario con este email"});
     }else{
-      console.log("no existe email");
       //TODO validate email, create service
       let hashPassword = await hash(body.password);
       let insertValues = [
@@ -79,39 +77,7 @@ export const signUp = async (req, res) => {
   })
 };
 
-export const insert = async (req, res) => {
-    const params = req.params;
-    const table = params.table;
-    const body = req.body;
-    let insertValues = body;
-    if(!Array.isArray(insertValues)){
-        insertValues = [];
-        insertValues.push(body);
-    }
-    let query = new Insert(table,insertValues);
-    console.log(query.toString());
-    const db = getConnection();
-    await db.query(query.toString(), (error, results) => {
-      if (error) {
-        throw error
-      }
-      res.status(200).json(results)
-    })
-};
-
-export const update = async (req, res) => {
-    const params = req.params;
-    const table = params.table;
-    const body = req.body;
-    const id = req.params.id;
-    let updateValues = body;
-    let query = new Update(table,updateValues);
-    query.setFilter("id = '"+id+"'");
-    const db = getConnection();
-    await db.query(query.toString(), (error, results) => {
-      if (error) {
-        throw error
-      }
-      res.status(200).json(results)
-    })
+export const hashPassword = async (password) => {
+  let hashPassword = await hash(password);
+  return hashPassword;
 };
