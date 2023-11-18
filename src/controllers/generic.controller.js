@@ -1,8 +1,8 @@
 import { v4 } from "uuid";
 import { getConnection } from "../database/database.js";
-import { Query } from "../utils/query.js";
-import { Insert } from "../utils/insert.js";
-import { Update } from "../utils/update.js";
+import { Query } from "../database/operation/query.js";
+import { Insert } from "../database/operation/insert.js";
+import { Update } from "../database/operation/update.js";
 
 export const getTableItem = async (req, res) => {
     const table = req.params.table

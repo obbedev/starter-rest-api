@@ -1,9 +1,9 @@
 import { getConnection } from "../database/database.js";
-import { Query } from "../utils/query.js";
-import { Insert } from "../utils/insert.js";
-import { Update } from "../utils/update.js";
+import { Query } from "../database/operation/query.js";
+import { Insert } from "../database/operation/insert.js";
+import { Update } from "../database/operation/update.js";
 import { hash } from "../utils/helper.js";
-import { Filter } from "../utils/filter.js";
+import { Filter } from "../database/operation/filter.js";
 
 export class AuthService{
     async login(email,password){
