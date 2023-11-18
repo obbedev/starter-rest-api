@@ -29,17 +29,12 @@ export const login = async (req, res) => {
               update.setValues({"token":token});
               update.setFilter("id = '"+user.id+"'");
               const db = getConnection();
-              await db.query(update.toString(), (error, results) => {
-                if (error) {
-                  throw error
-                }
-                res.status(200).json({token:token})
-              })
+              await db.query(update.toString());
           }
           res.status(200).json({token:token})
-      }else{
-        res.status(401).json({error:"Invalid credentials"})
-      }
+        }else{
+          res.status(401).json({error:"Invalid credentials"})
+        }
       } catch (error) {
         res.status(500).json({error})
       }
@@ -48,8 +43,6 @@ export const login = async (req, res) => {
 
 export const signUp = async (req, res) => {
   const body = req.body;
-
-  //check if exists the user
   let query = new Query('api_user','id,token');
   query.setFilter("email = '"+body.email+"'");
   const db = getConnection();
@@ -62,16 +55,16 @@ export const signUp = async (req, res) => {
       res.status(400).json({error:"Ya existe un usuario con este email"});
     }else{
       //TODO validate email, create service
-      let hashPassword = await hash(body.password);
+      let hashedPassword = await hashPassword(body.password);
       let insertValues = [
-        {email:body.email,password:hashPassword}
+        {email:body.email,password:hashedPassword}
       ]; 
       let insert = new Insert('api_user',insertValues);
       await db.query(insert.toString(), (error, results) => {
         if (error) {
           throw error
         }
-        res.status(200).json(results)
+        res.status(200).json({message:"User created"})
       })
     }
   })
