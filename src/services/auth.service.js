@@ -60,7 +60,7 @@ export class AuthService{
                 return results.rows[0]["id"];
             }
         } catch (error) {
-            throw error;
+            throw error
         }
     }
 
