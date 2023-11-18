@@ -40,7 +40,7 @@ export class AuthService{
     async signUp(data){
         try {
             let query = new Query('api_user','id');
-            query.setFilter("email = '"+body.email+"'");
+            query.setFilter("email = '"+data.email+"'");
             const db = getConnection();
             let results = await db.query(query.toString());
             if(results.rows.length>0){
@@ -55,7 +55,7 @@ export class AuthService{
                 let insert = new Insert('api_user',insertValues);
                 await db.query(insert.toString());
                 let query = new Query('api_user','id');
-                query.setFilter("email = '"+body.email+"'");
+                query.setFilter("email = '"+data.email+"'");
                 let results = await db.query(query.toString());
                 return results.rows[0]["id"];
             }
