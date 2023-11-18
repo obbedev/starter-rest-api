@@ -3,6 +3,7 @@ import { getConnection } from "../database/database.js";
 import { Query } from "../database/operation/query.js";
 import { Insert } from "../database/operation/insert.js";
 import { Update } from "../database/operation/update.js";
+import { Delete } from "../database/operation/delete.js";
 
 export const getTableItem = async (req, res) => {
     const table = req.params.table
@@ -86,3 +87,18 @@ export const update = async (req, res) => {
     })
 };
 
+export const deleteItem = async (req, res) => {
+  const params = req.params;
+  const table = params.table;
+  const body = req.body;
+  const id = req.params.id;
+  let query = new Delete(table);
+  query.addFilter("id = '"+id+"'");
+  const db = getConnection();
+  await db.query(query.toString(), (error, results) => {
+    if (error) {
+      throw error
+    }
+    res.status(200).json(results)
+  })
+};
