@@ -28,7 +28,7 @@ export const signUp = async (req, res) => {
     await authService.signUp(body);
     res.status(200).json({message:"User created"});
   } catch (error) {
-    console.log(error);
+    console.log("Error creating account:",error);
     res.status(500).json({error:error})
   }
 };
