@@ -37,8 +37,31 @@ export class AuthService{
         }
     }
 
-    signUp(data){
-
+    async signUp(data){
+        try {
+            let query = new Query('api_user','id');
+            query.setFilter("email = '"+body.email+"'");
+            const db = getConnection();
+            let results = await db.query(query.toString());
+            if(results.rows.length>0){
+                console.log("Ya existe email");
+                throw new Error("You have already an account");
+            }else{
+                //TODO validate email
+                let hashedPassword = await hashPassword(data.password);
+                let insertValues = [
+                  {email:data.email,password:hashedPassword}
+                ]; 
+                let insert = new Insert('api_user',insertValues);
+                await db.query(insert.toString());
+                let query = new Query('api_user','id');
+                query.setFilter("email = '"+body.email+"'");
+                let results = await db.query(query.toString());
+                return results.rows[0]["id"];
+            }
+        } catch (error) {
+            throw error;
+        }
     }
 
     async hashPassword(password){

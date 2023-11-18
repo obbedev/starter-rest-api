@@ -23,31 +23,14 @@ export const login = async (req, res) => {
 
 export const signUp = async (req, res) => {
   const body = req.body;
-  let query = new Query('api_user','id,token');
-  query.setFilter("email = '"+body.email+"'");
-  const db = getConnection();
-  await db.query(query.toString(), async (error, results) => {
-    if (error) {
-      throw error
-    }
-    if(results.rows.length>0){
-      console.log("existe email");
-      res.status(400).json({error:"Ya existe un usuario con este email"});
-    }else{
-      //TODO validate email, create service
-      let hashedPassword = await hashPassword(body.password);
-      let insertValues = [
-        {email:body.email,password:hashedPassword}
-      ]; 
-      let insert = new Insert('api_user',insertValues);
-      await db.query(insert.toString(), (error, results) => {
-        if (error) {
-          throw error
-        }
-        res.status(200).json({message:"User created"})
-      })
-    }
-  })
+  try {
+    const authService = new AuthService();
+    await authService.signUp(body);
+    res.status(200).json({message:"User created"});
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({error})
+  }
 };
 
 export const hashPassword = async (password) => {
