@@ -3,8 +3,6 @@ import path from "path";
 import fs from "fs";
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 //TODO get from env
 const manualSalt = '$2b$10$ABCDEFGHIJKLMNOPQRSTUV';
@@ -18,6 +16,8 @@ export const hash = async (...value) => {
 }
 
 export const getTmpPath = () => {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
   console.log(path.join(__dirname, '/../uploads'))
   if (fs.existsSync("/tmp")) {
     return "/tmp";
