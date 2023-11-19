@@ -8,22 +8,22 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-export class FileRoutes{
-    constructor(router){
+export class FileRoutes {
+    constructor(router) {
         this.router = router;
     }
 
-    registerRoutes(){
+    registerRoutes() {
         this.router.post("/file/upload", upload.single('file'), (req, res, next) => {
             console.log(req.file)
-        
-            res.status(200).json({ title: __dirname, message: req.file })
+
+            res.status(200).json({ message: req.file })
         });
-        
+
         this.router.post("/file/:id", (req, res, next) => {
             const params = req.params;
             console.log(params)
-            res.status(200).json({ title: __dirname, message: params })
+            res.status(200).json({ message: params })
         });
     }
 }
