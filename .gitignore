@@ -74,3 +74,4 @@ dist
 .tern-port
 
 .env
+src/uploads/*

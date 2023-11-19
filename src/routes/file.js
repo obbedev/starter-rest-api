@@ -1,23 +1,9 @@
-import path from "path";
-import fs from "fs";
 import multer from "multer";
-
-//get path, issue with es modules and __dirname
-//create service to get project paths
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-//service should say where uploads tmp is
-const uploadFolder = path.join(__dirname, '/../uploads');
-if (!fs.existsSync(uploadFolder)) {
-    fs.mkdirSync(uploadFolder);
-}
+import { getTmpPath } from "../utils/helper.js";
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, uploadFolder);
+        cb(null, getTmpPath());
     }
 });
 const upload = multer({ storage: storage });
