@@ -50,7 +50,7 @@ typings/
 # Optional npm cache directory
 .npm
 
-dist
+#dist
 
 # Gatsby files
 .cache/
@@ -76,3 +76,4 @@ dist
 .env
 src/uploads/*
 notes.txt
+dist/node_modules

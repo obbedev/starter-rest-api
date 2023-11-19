@@ -11,6 +11,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 export class FileRoutes {
+    private router = null;
     constructor(router) {
         this.router = router;
     }

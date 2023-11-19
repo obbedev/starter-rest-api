@@ -3,6 +3,7 @@ import {
 } from "../controllers/auth.controller.js";
 
 export class AuthRoutes {
+  private router = null;
   constructor(router) {
     this.router = router;
   }

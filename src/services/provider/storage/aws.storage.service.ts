@@ -5,6 +5,8 @@ import AWS from 'aws-sdk';
 import { AbstractStorageService } from "./abstract.storage.service.js";
 
 export class AwsStorageService extends AbstractStorageService {
+    private bucketName = '';
+    private s3 = null;
     constructor() {
         super();
         this.bucketName = process.env.CYCLIC_BUCKET_NAME;

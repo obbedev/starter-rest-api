@@ -1,4 +1,8 @@
+import { Filter } from "./filter.js";
+
 export class Delete {
+    private filters = [];
+    private tableName = '';
     constructor(tableName) {
         this.tableName = tableName;
         this.filters = [];
@@ -10,7 +14,7 @@ export class Delete {
 
     toString() {
         //security
-        if (!this.filters.length > 0) {
+        if (!(this.filters.length > 0)) {
             throw new Error("A filter must be set before generating DELETE query.");
         }
         let query = "";

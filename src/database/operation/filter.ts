@@ -1,4 +1,6 @@
 export class Filter {
+  private logicalOperator = "";
+  private filters = [];
   constructor() {
     this.filters = [];
     this.logicalOperator = 'AND';

@@ -8,6 +8,7 @@ import {
 import { isLogged } from "../utils/auth.js";
 
 export class TableRoutes {
+  private router = null;
   constructor(router) {
     this.router = router;
   }

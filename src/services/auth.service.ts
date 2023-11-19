@@ -33,7 +33,7 @@ export class AuthService{
                     return token;
                   }else{
                     let error = new Error("Invalid credentials");
-                    error.code = 401;
+                    error["code"] = 401;
                     throw error;
                   }
             } catch (error) {

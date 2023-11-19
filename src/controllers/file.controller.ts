@@ -5,9 +5,10 @@ export const uploadFile = async (req, res) => {
     console.log(req.file)
     try {
         let storageService = new AwsStorageService();
-        let service = new FileService(storageService);
+        let service = new FileService(storageService,null);
         let id = await service.createFile(req.file.originalname, req.file.path, req.file.mimetype);
         //TODO delete tmp file
+        //should return url, name
         res.status(200).json({ message: id })
     } catch (error) {
         console.log(error)
@@ -20,7 +21,7 @@ export const getFile = async (req, res) => {
     try {
         let { id } = req.params;
         let storageService = new AwsStorageService();
-        let service = new FileService(storageService);
+        let service = new FileService(storageService,null);
         let fileUrl = await service.getFile(id);
         res.status(200).json({ message: fileUrl })
     } catch (error) {

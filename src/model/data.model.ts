@@ -2,23 +2,24 @@
  * Base class to accese the object data
  */
 export class DataModel{
+    private tableName = '';
     constructor(tableName){
         this.tableName = tableName;
     }
 
-    findOne(id){
+    findOne(id,fields){
 
     }
 
-    findMany(filter){
+    findMany(filter,fields){
 
     }
 
-    updateOne(id){
+    updateOne(id,values){
 
     }
 
-    updateMany(filter){
+    updateMany(filter,values){
 
     }
 
@@ -30,11 +31,11 @@ export class DataModel{
         
     }
 
-    insertOne(id){
+    insertOne(id,values){
 
     }
 
-    insertMany(filter){
+    insertMany(filter,values){
         
     }
 

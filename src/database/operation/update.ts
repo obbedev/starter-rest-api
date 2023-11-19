@@ -1,9 +1,11 @@
+import { Filter } from "./filter.js";
+
 export class Update {
-    tableName = '';
-    values = [];
-    filter = "";
-    filters = [];
-    constructor(tableName, values) {
+    private tableName = '';
+    private values = [];
+    private filter = "";
+    private filters = [];
+    constructor(tableName, values = []) {
         this.tableName = tableName;
         this.setValues(values);
     }
