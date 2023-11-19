@@ -22,7 +22,7 @@ export class FileService {
     async createFile(fileName, filePath, mimeType) {
         try {
             //or get extension from mimetype
-            let extension = his.fileExtension(fileName);
+            let extension = this.fileExtension(fileName);
             let insert = new Insert("file");
             //get provider type id from env or current storage
             let values = [
