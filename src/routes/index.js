@@ -1,13 +1,11 @@
-import { Router } from "express";
-import taskRoutes from "./tasks.js";
-import tableRoutes from "./table.js";
-import authRoutes from "./auth.js";
-import express from "express";
-const app = express();
 import router from "./router.js";
- 
-app.use(taskRoutes);
-app.use(tableRoutes);
-app.use(authRoutes);
+import {TableRoutes} from "./table.js";
+import {AuthRoutes} from "./auth.js";
+import {FileRoutes} from "./file.js";
+
+let routes = [
+    new FileRoutes(router),new AuthRoutes(router),new TableRoutes(router)
+];
+routes.forEach(routesObject=>routesObject.registerRoutes());
 
 export default router;

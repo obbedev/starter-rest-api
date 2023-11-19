@@ -5,11 +5,16 @@ import {
   insert,
   update
 } from "../controllers/generic.controller.js";
-import { isLogged  } from "../utils/auth.js";
+import { isLogged } from "../utils/auth.js";
 
-router.get("/:table", isLogged, getTableItems);
-router.get("/:table/:id", isLogged, getTableItem);
-router.post("/:table", isLogged, insert);
-router.put("/:table/:id", isLogged, update);
-
-export default router;
+export class TableRoutes {
+  constructor(router) {
+    this.router = router;
+  }
+  registerRoutes() {
+    router.get("/:table", isLogged, getTableItems);
+    router.get("/:table/:id", isLogged, getTableItem);
+    router.post("/:table", isLogged, insert);
+    router.put("/:table/:id", isLogged, update);
+  }
+}

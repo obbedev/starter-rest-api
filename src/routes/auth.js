@@ -1,9 +1,13 @@
-import router from "./router.js";
 import {
   login, signUp
 } from "../controllers/auth.controller.js";
 
-router.post("/auth/login", login);
-router.post("/auth/signup", signUp);
-
-export default router;
+export class AuthRoutes {
+  constructor(router) {
+    this.router = router;
+  }
+  registerRoutes() {
+    this.router.post("/auth/login", login);
+    this.router.post("/auth/signup", signUp);
+  }
+}
