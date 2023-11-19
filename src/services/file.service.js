@@ -21,8 +21,7 @@ export class FileService {
      */
     async createFile(fileName, filePath, mimeType) {
         try {
-            //or get extension from mimetype
-            let extension = this.fileExtension(fileName);
+            let extension = this.fileExtension(fileName,mimeType);
             let insert = new Insert("file");
             //get provider type id from env or current storage
             let values = [
@@ -49,17 +48,18 @@ export class FileService {
      */
     async getFile(id) {
         try {
-            let query = new Query("file", "id");
+            let query = new Query("file", "id,file_name");
             let filter = new Filter();
             filter.addEqualFilter("id", id);
             query.addFilter(filter);
             const db = getConnection();
             let result = await db.query(query.toString());
             if (result.rows.length > 0) {
-                let fileUrl = await this.storageService.getFileUrl(result.rows[0]['id'] + ".txt");
-                //TODO get file data or just url?
-                console.log(fileUrl)
+                let file = result.rows[0];
+                let fileUrl = await this.storageService.getFileUrl(file["id"] + this.fileExtension(file["file_name"]));
                 return fileUrl;
+            }else{
+                throw new Error("File does not exist");
             }
         } catch (error) {
             //todo delete inserted file
@@ -68,7 +68,7 @@ export class FileService {
         }
     }
 
-    fileExtension(filePath) {
+    fileExtension(filePath,mimeType) {
         return Path.extname(filePath)
     }
 
