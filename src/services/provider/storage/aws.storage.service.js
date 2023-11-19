@@ -1,10 +1,20 @@
-import { AbstractStorageService } from "./abstract.storage.service";
+import pkg from 'aws-sdk';
+const { S3 } = pkg;
+import AWS from 'aws-sdk';
+
+import { AbstractStorageService } from "./abstract.storage.service.js";
 
 export class AwsStorageService extends AbstractStorageService {
     constructor() {
         super();
         this.bucketName = process.env.CYCLIC_BUCKET_NAME;
-        this.s3 = new AWS.S3();
+        AWS.config.update({
+            region:process.env.AWS_REGION,
+            accessKeyId:process.env.AWS_ACCESS_KEY_ID,
+            secretAccessKey:process.env.AWS_SECRET_ACCESS_KEY,
+            sessionToken:process.env.AWS_SESSION_TOKEN,
+        });
+        this.s3 = new S3();
     }
 
     async getFileUrl(path) {

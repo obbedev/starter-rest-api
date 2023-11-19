@@ -1,5 +1,7 @@
 import multer from "multer";
 import { getTmpPath } from "../utils/helper.js";
+import { getFile, uploadFile } from "../controllers/file.controller.js";
+import { isLogged } from "../utils/auth.js";
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -14,16 +16,8 @@ export class FileRoutes {
     }
 
     registerRoutes() {
-        this.router.post("/file/upload", upload.single('file'), (req, res, next) => {
-            console.log(req.file)
-
-            res.status(200).json({ message: req.file })
-        });
-
-        this.router.post("/file/:id", (req, res, next) => {
-            const params = req.params;
-            console.log(params)
-            res.status(200).json({ message: params })
-        });
+        this.router.post("/file/upload", isLogged, upload.single('file'), uploadFile);
+        //maybe do not check if logged, add signature
+        this.router.get("/file/:id", isLogged, getFile);
     }
 }

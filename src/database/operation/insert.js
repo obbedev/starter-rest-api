@@ -24,7 +24,8 @@ export class Insert {
           return "("+elementValues.join(",")+")";
         });
         query += sqlValues.join(",");
-        
+        //todo would not work for mysql
+        query += " RETURNING id;";
         console.log(query);
         return query;
     }
