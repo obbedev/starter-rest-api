@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "env-cmd nodemon --exec ./node_modules/.bin/ts-node-esm src/index.ts",
     "repl": "env-cmd node",
-    "start": "npm run copy && node dist/index.js",
+    "start": "node dist/index.js",
     "build": "tsc",
     "copy":"cp './tsconfig.json' './dist/' && cp './package.json' './dist/' && cp './package-lock.json' './dist/' && cp -r './node_modules' './dist/'"
   },
