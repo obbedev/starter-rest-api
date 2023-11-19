@@ -31,13 +31,11 @@ export class FileService {
             insert.setValues(values);
             const db = getConnection();
             let result = await db.query(insert.toString());
-            let remoteFilePath = result.rows[result.rows.length - 1]["id"] + "." + extension;
-            console.log(remoteFilePath)
+            let id = result.rows[result.rows.length - 1]["id"];
+            let remoteFilePath = id + extension;
             let fileData = await fs.readFile(filePath);
             let resultservice = await this.storageService.uploadFile(fileData, remoteFilePath);
-            //todo create previews
-            console.log(resultservice);
-            return;
+            return id;
         } catch (error) {
             //todo delete inserted file
             console.log(error)
