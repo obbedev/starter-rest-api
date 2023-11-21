@@ -1,9 +1,9 @@
 import { getConnection } from "../database/database.js";
-import { Query } from "../database/operation/query.js";
 import { Insert } from "../database/operation/insert.js";
 import { Update } from "../database/operation/update.js";
 import { Delete } from "../database/operation/delete.js";
 import { DataModel } from "../model/data.model.js";
+import { Filter } from "../database/operation/filter.js";
 export const getTableItem = async (req, res) => {
     const table = req.params.table;
     const id = req.params.id;
@@ -17,24 +17,31 @@ export const getTableItem = async (req, res) => {
 export const getTableItems = async (req, res) => {
     const params = req.params;
     const table = params.table;
-    let query = new Query(table, req.query.fields);
+    const fields = req.query?.fields;
+    const order = req.query?.order;
+    //calculate limit/offset
     const page = parseInt(req.query.page) || 1;
     const size = parseInt(req.query.page_size) || 10;
     const offset = (page - 1) * size;
     const limit = size;
-    if (limit) {
-        query.setLimit(limit);
-    }
-    if (offset) {
-        query.setOffset(offset);
-    }
-    const db = await getConnection();
-    await db.query(query.toString(), async (error, results) => {
-        if (error) {
-            throw error;
+    //any field in query that is not order,fields,page,page_size
+    //TODO need complex filter with operators
+    const filter = new Filter();
+    const propertiesToOmit = ["fields", "order", "page", "page_size"];
+    const newObj = { ...req.query };
+    propertiesToOmit.forEach(prop => { delete newObj[prop]; });
+    for (const key in newObj) {
+        if (Object.prototype.hasOwnProperty.call(newObj, key)) {
+            const filterValue = newObj[key];
+            if ((filterValue !== null && filterValue !== undefined && filterValue !== '')) {
+                filter.addEqualFilter(key, filterValue);
+            }
         }
-        res.status(200).json(results.rows);
-    });
+    }
+    const db = getConnection();
+    let dataModel = new DataModel(table, db);
+    let result = await dataModel.findMany(filter, fields, order, limit);
+    res.status(200).json(result);
 };
 export const insert = async (req, res) => {
     const params = req.params;

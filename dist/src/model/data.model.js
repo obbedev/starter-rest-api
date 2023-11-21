@@ -24,15 +24,16 @@ export class DataModel {
         }
         return {};
     }
-    async findMany(filter = [], fields = "") {
+    async findMany(filter = [], fields = "", order = "", limit = "") {
         this.query.addFilter(filter);
         this.query.setFields(fields);
+        this.query.setLimit(limit);
         let result = await this.db.query(this.query.toString(), null);
         console.log(result.rows);
         if (result.rows.length > 0) {
             return result.rows;
         }
-        return [{}];
+        return [];
     }
     async updateOne(id, values) {
         return;

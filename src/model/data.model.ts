@@ -31,15 +31,16 @@ export class DataModel implements DatabaseModelI {
     return {};
   }
 
-  async findMany(filter: any = [], fields: string|string[] = ""): Promise<any[]> {
+  async findMany(filter: any = [], fields: string|string[] = "", order: string = "", limit: number|string = ""): Promise<any[]> {
     this.query.addFilter(filter);
     this.query.setFields(fields);
+    this.query.setLimit(limit);
     let result = await this.db.query(this.query.toString(),null);
     console.log(result.rows)
     if(result.rows.length>0){
       return result.rows;
     }
-    return [{}];
+    return [];
   }
 
   async updateOne(id: any, values: any): Promise<void> {

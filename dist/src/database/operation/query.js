@@ -50,12 +50,12 @@ export class Query {
                     if (result) {
                         return result;
                     }
-                    return false;
                 }
                 else if (filter) {
                     return filter;
                 }
             });
+            parsedFilters = parsedFilters.filter(item => !!item);
             if (parsedFilters.length > 0) {
                 query += " WHERE ";
                 query += parsedFilters.join(" ");
