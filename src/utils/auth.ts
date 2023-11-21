@@ -1,11 +1,10 @@
 import { Query } from "../database/operation/query.js";
 import { getConnection } from "../database/database.js";
 import { Filter } from "../database/operation/filter.js";
+import { DataModel } from "../model/data.model.js";
 
 export const isLogged = async (req, res, next) => {
     try {
-      next();
-      return;
       const token = req?.headers?.authorization?.split(' ')[1];
       if(token && (typeof token === 'string' || token instanceof String)){
         let query = new Query('api_user','id');

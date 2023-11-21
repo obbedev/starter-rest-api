@@ -7,62 +7,73 @@ export class Query {
     private offset = '';
     private filters = [];
     private filter = '';
-    constructor(tableName, fields) {
+    constructor(tableName, fields = "") {
         this.tableName = tableName;
         this.setFields(fields);
     }
-    
-    setFields(fields){
-        if(fields == undefined || !fields){
+
+    setFields(fields) {
+        if (fields == undefined || !fields) {
             fields = "*";
         }
         this.fields = fields;
     }
-     
-    setLimit(limit){
+
+    setLimit(limit) {
         this.limit = limit;
     }
 
-    setOffset(offest){
+    setOffset(offest) {
         this.offset = offest;
     }
 
-    setFilter(filter){
+    setFilter(filter) {
         this.filter = filter;
     }
 
-    addFilter(filter){
+    addFilter(filter) {
         this.filters.push(filter);
     }
 
     toString() {
-        let query = "select ";
-
+        let query = "SELECT ";
         //get fields
-        query += this.fields + " ";
-        
-        query += "from " + this.tableName;
+        if(Array.isArray(this.fields)){
+            query += this.fields.map(item => {
+                return `'${item}'`;
+              }).join(",");
+        }else{
+            query += this.fields;
+        }
 
-        if(this.filter){
-            query += " where " + this.filter;
-        }else if(this.filters.length>0){
-            query += " where ";
-            this.filters.forEach((filter)=>{
-                query += " ";
-                if(filter instanceof Filter){
-                    query += filter.getFilterString();
-                }else{
-                    query += filter;
+        query += " FROM " + this.tableName;
+
+        if (this.filter) {
+            query += " WHERE " + this.filter;
+        }else if (this.filters.length > 0) {
+            let parsedFilters = this.filters.map((filter) => {
+                if (filter instanceof Filter) {
+                    let result =  filter.getFilterString();
+                    if(result){
+                        return result;
+                    }
+                    return false;
+                } else if(filter){
+                    return filter;
                 }
             });
+            if(parsedFilters.length>0){
+                query += " WHERE ";
+                query += parsedFilters.join(" ");
+            }
         }
-        if(this.limit){
-            query += " LIMIT "+this.limit;
+        if (this.limit) {
+            query += " LIMIT " + this.limit;
         }
-        if(this.offset){
-            query += " offset "+this.offset;
+        if (this.offset) {
+            query += " OFFSET " + this.offset;
         }
-        console.log(query)
+        console.log("QUERY ->>>",query)
 
         return query;
     }

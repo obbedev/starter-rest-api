@@ -4,24 +4,18 @@ import { Query } from "../database/operation/query.js";
 import { Insert } from "../database/operation/insert.js";
 import { Update } from "../database/operation/update.js";
 import { Delete } from "../database/operation/delete.js";
+import { DataModel } from "../model/data.model.js";
 
 export const getTableItem = async (req, res) => {
     const table = req.params.table
     const id = req.params.id
 
     let fields = req.query.fields?req.query.fields:"*";
-    let query = new Query(table,fields);
-    query.setFilter("id = "+id);
-
     const db = getConnection();
-    await db.query(query.toString(), (error, results) => {
-      if (error) {     
-        console.log(error) 
-        throw error
-      }
-      console.log(results);
-      res.status(200).json(results.rows[0]);
-    });
+    let dataModel = new DataModel(table,db);
+    let result = await dataModel.findOne(id,fields);
+    console.log(result);
+    res.status(200).json(result);
 };
 
 export const getTableItems = async (req, res) => {
