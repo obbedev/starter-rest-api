@@ -1,25 +1,55 @@
+import { Query } from '../database/operation/query.js';
+import { Filter } from '../database/operation/filter.js';
 /**
  * Base class to accese the object data
  */
 export class DataModel {
-    constructor(tableName) {
-        this.tableName = '';
-        this.tableName = tableName;
+    constructor(entityName, db) {
+        /**
+         * Table name for mysql
+         */
+        this.entityName = '';
+        this.entityName = entityName;
+        this.db = db;
+        this.query = new Query(this.entityName);
     }
-    findOne(id, fields) {
+    async findOne(id, fields = "") {
+        let filter = new Filter();
+        filter.addEqualFilter("id", id);
+        this.query.addFilter(filter);
+        this.query.setFields(fields);
+        let result = await this.db.query(this.query.toString(), null);
+        if (result.rows.length > 0) {
+            return result.rows[0];
+        }
+        return {};
     }
-    findMany(filter, fields) {
+    async findMany(filter = [], fields = "") {
+        this.query.addFilter(filter);
+        this.query.setFields(fields);
+        let result = await this.db.query(this.query.toString(), null);
+        console.log(result.rows);
+        if (result.rows.length > 0) {
+            return result.rows;
+        }
+        return [{}];
     }
-    updateOne(id, values) {
+    async updateOne(id, values) {
+        return;
     }
-    updateMany(filter, values) {
+    async updateMany(filter, values) {
+        return;
     }
-    deleteOne(id) {
+    async deleteOne(id) {
+        return;
     }
-    deleteMany(filter) {
+    async deleteMany(filter) {
+        return;
     }
-    insertOne(id, values) {
+    async insertOne(values) {
+        return 1; //return inserted id
     }
-    insertMany(filter, values) {
+    async insertMany(values) {
+        return;
     }
 }

@@ -1,4 +1,3 @@
-// DataModel.ts
 import { DatabaseI } from '../database/database.interface.js';
 import { DatabaseModelI } from '../interface/model.database.interface.js';
 import { Query } from '../database/operation/query.js';

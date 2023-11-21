@@ -1,7 +1,6 @@
 import { Query } from "../database/operation/query.js";
 import { getConnection } from "../database/database.js";
 import { Filter } from "../database/operation/filter.js";
-import { DataModel } from "../model/data.model.js";
 
 export const isLogged = async (req, res, next) => {
     try {

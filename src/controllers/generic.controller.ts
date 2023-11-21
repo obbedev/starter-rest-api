@@ -1,4 +1,3 @@
-import { v4 } from "uuid";
 import { getConnection } from "../database/database.js";
 import { Query } from "../database/operation/query.js";
 import { Insert } from "../database/operation/insert.js";

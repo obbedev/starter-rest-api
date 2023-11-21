@@ -1,6 +1,6 @@
 import { Filter } from "./filter.js";
 export class Query {
-    constructor(tableName, fields) {
+    constructor(tableName, fields = "") {
         this.tableName = '';
         this.fields = '';
         this.limit = '';
@@ -29,32 +29,45 @@ export class Query {
         this.filters.push(filter);
     }
     toString() {
-        let query = "select ";
+        let query = "SELECT ";
         //get fields
-        query += this.fields + " ";
-        query += "from " + this.tableName;
+        if (Array.isArray(this.fields)) {
+            query += this.fields.map(item => {
+                return `'${item}'`;
+            }).join(",");
+        }
+        else {
+            query += this.fields;
+        }
+        query += " FROM " + this.tableName;
         if (this.filter) {
-            query += " where " + this.filter;
+            query += " WHERE " + this.filter;
         }
         else if (this.filters.length > 0) {
-            query += " where ";
-            this.filters.forEach((filter) => {
-                query += " ";
+            let parsedFilters = this.filters.map((filter) => {
                 if (filter instanceof Filter) {
-                    query += filter.getFilterString();
+                    let result = filter.getFilterString();
+                    if (result) {
+                        return result;
+                    }
+                    return false;
                 }
-                else {
-                    query += filter;
+                else if (filter) {
+                    return filter;
                 }
             });
+            if (parsedFilters.length > 0) {
+                query += " WHERE ";
+                query += parsedFilters.join(" ");
+            }
         }
         if (this.limit) {
             query += " LIMIT " + this.limit;
         }
         if (this.offset) {
-            query += " offset " + this.offset;
+            query += " OFFSET " + this.offset;
         }
-        console.log(query);
+        console.log("QUERY ->>>", query);
         return query;
     }
 }
