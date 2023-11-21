@@ -28,14 +28,14 @@ export const getTableItems = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const size = parseInt(req.query.page_size) || 10;
   const offset = (page - 1) * size;
-  const limit = size;
-
+  const limit = `${size},${offset}`;
   //any field in query that is not order,fields,page,page_size
   //TODO need complex filter with operators
+  //TODO extract function
   const filter = new Filter();
   const propertiesToOmit = ["fields", "order", "page", "page_size"];
   const newObj = { ...req.query };
-  propertiesToOmit.forEach(prop => { delete newObj[prop] });
+  propertiesToOmit.forEach(prop => { delete newObj[prop]; });
   for (const key in newObj) {
     if (Object.prototype.hasOwnProperty.call(newObj, key)) {
       const filterValue = newObj[key];

@@ -19,25 +19,25 @@ export class DataModel implements DatabaseModelI {
     this.query = new Query(this.entityName);
   }
 
-  async findOne(id: any, fields: string|string[]|null = ""): Promise<any> {
+  async findOne(id: any, fields: string | string[] | null = ""): Promise<any> {
     let filter = new Filter();
-    filter.addEqualFilter("id",id);
+    filter.addEqualFilter("id", id);
     this.query.addFilter(filter);
     this.query.setFields(fields);
-    let result = await this.db.query(this.query.toString(),null);
-    if(result.rows.length>0){
+    let result = await this.db.query(this.query.toString(), null);
+    if (result.rows.length > 0) {
       return result.rows[0];
     }
     return {};
   }
 
-  async findMany(filter: any = [], fields: string|string[] = "", order: string = "", limit: number|string = ""): Promise<any[]> {
+  async findMany(filter: any = [], fields: string | string[] = "", order: string = "", limit: number | string = ""): Promise<any[]> {
     this.query.addFilter(filter);
     this.query.setFields(fields);
     this.query.setLimit(limit);
-    let result = await this.db.query(this.query.toString(),null);
+    let result = await this.db.query(this.query.toString(), null);
     console.log(result.rows)
-    if(result.rows.length>0){
+    if (result.rows.length > 0) {
       return result.rows;
     }
     return [];

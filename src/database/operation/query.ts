@@ -38,11 +38,11 @@ export class Query {
     toString() {
         let query = "SELECT ";
         //get fields
-        if(Array.isArray(this.fields)){
+        if (Array.isArray(this.fields)) {
             query += this.fields.map(item => {
                 return `'${item}'`;
-              }).join(",");
-        }else{
+            }).join(",");
+        } else {
             query += this.fields;
         }
 
@@ -50,30 +50,34 @@ export class Query {
 
         if (this.filter) {
             query += " WHERE " + this.filter;
-        }else if (this.filters.length > 0) {
+        } else if (this.filters.length > 0) {
             let parsedFilters = this.filters.map((filter) => {
                 if (filter instanceof Filter) {
-                    let result =  filter.getFilterString();
-                    if(result){
+                    let result = filter.getFilterString();
+                    if (result) {
                         return result;
                     }
-                } else if(filter){
+                } else if (filter) {
                     return filter;
                 }
             });
-            parsedFilters = parsedFilters.filter(item=>!!item);
-            if(parsedFilters.length>0){
+            parsedFilters = parsedFilters.filter(item => !!item);
+            if (parsedFilters.length > 0) {
                 query += " WHERE ";
                 query += parsedFilters.join(" ");
             }
         }
         if (this.limit) {
-            query += " LIMIT " + this.limit;
-        }
-        if (this.offset) {
+            let limitParsed = this.limit.split(",");
+            query += " LIMIT " + limitParsed[0];
+            if (limitParsed.length > 1) {
+                query += " OFFSET " + limitParsed[1];
+            }
+        } else if (this.offset) {
             query += " OFFSET " + this.offset;
         }
-        console.log("QUERY ->>>",query)
+
+        console.log("QUERY ->>>", query)
 
         return query;
     }

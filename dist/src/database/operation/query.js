@@ -62,9 +62,13 @@ export class Query {
             }
         }
         if (this.limit) {
-            query += " LIMIT " + this.limit;
+            let limitParsed = this.limit.split(",");
+            query += " LIMIT " + limitParsed[0];
+            if (limitParsed.length > 1) {
+                query += " OFFSET " + limitParsed[1];
+            }
         }
-        if (this.offset) {
+        else if (this.offset) {
             query += " OFFSET " + this.offset;
         }
         console.log("QUERY ->>>", query);

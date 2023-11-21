@@ -1,7 +1,7 @@
 export interface DatabaseModelI {
     findOne(id: any, fields: string[]): Promise<any>;
 
-    findMany(filter: any, fields: string[]): Promise<any[]>;
+    findMany(filter: any, fields: string | string[], order: string, limit: number | string): Promise<any[]>;
 
     updateOne(id: any, values: any): Promise<void>;
 
