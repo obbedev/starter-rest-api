@@ -2,6 +2,7 @@ import { AuthService } from "../services/auth.service.js";
 
 export const login = async (req, res) => {
     const body = req.body;
+    console.log("login body",body);
     try {
       const authService = new AuthService();
       let token = await authService.login(body.email,body.password);
