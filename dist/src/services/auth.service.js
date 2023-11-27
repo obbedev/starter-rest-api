@@ -6,9 +6,11 @@ import { hash } from "../utils/helper.js";
 import { Filter } from "../database/operation/filter.js";
 export class AuthService {
     async login(email, password) {
+        console.log("login", email, password);
         if (password) {
             let query = new Query('api_user', 'id,token');
             let hashedPassword = await this.hashPassword(password);
+            console.log("hashedPassword", hashedPassword);
             let filter = new Filter();
             filter.addEqualFilter('email', email);
             filter.addEqualFilter('password', hashedPassword);
