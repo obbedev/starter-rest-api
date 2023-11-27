@@ -7,7 +7,9 @@ import { dirname } from 'path';
 const manualSalt = '$2b$10$ABCDEFGHIJKLMNOPQRSTUV';
 export const hash = async (...value) => {
     try {
+        console.log(...value);
         const hashedValue = await bcrypt.hash(...value, manualSalt);
+        console.log(...value, hashedValue);
         return hashedValue;
     }
     catch (error) {

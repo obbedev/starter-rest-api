@@ -6,6 +6,7 @@ export const login = async (req, res) => {
     try {
       const authService = new AuthService();
       let token = await authService.login(body.email,body.password);
+      console.log("token",token);
       res.status(200).json({token:token})
     } catch (error) {
       console.log(error);
