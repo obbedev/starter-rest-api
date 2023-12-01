@@ -26,14 +26,16 @@ export class Query {
         this.filter = filter;
     }
     addFilter(filter) {
-        this.filters.push(filter);
+        if (filter) {
+            this.filters.push(filter);
+        }
     }
     toString() {
         let query = "SELECT ";
         //get fields
         if (Array.isArray(this.fields)) {
             query += this.fields.map(item => {
-                return `'${item}'`;
+                return `${item}`;
             }).join(",");
         }
         else {

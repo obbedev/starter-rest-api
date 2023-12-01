@@ -24,7 +24,7 @@ export class DataModel {
         }
         return {};
     }
-    async findMany(filter = [], fields = "", order = "", limit = "") {
+    async findMany(filter = null, fields = "", order = "", limit = "") {
         this.query.addFilter(filter);
         this.query.setFields(fields);
         this.query.setLimit(limit);

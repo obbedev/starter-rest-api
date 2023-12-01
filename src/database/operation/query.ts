@@ -32,7 +32,9 @@ export class Query {
     }
 
     addFilter(filter) {
-        this.filters.push(filter);
+        if(filter){
+            this.filters.push(filter);
+        }
     }
 
     toString() {
@@ -40,7 +42,7 @@ export class Query {
         //get fields
         if (Array.isArray(this.fields)) {
             query += this.fields.map(item => {
-                return `'${item}'`;
+                return `${item}`;
             }).join(",");
         } else {
             query += this.fields;

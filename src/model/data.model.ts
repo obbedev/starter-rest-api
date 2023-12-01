@@ -31,7 +31,7 @@ export class DataModel implements DatabaseModelI {
     return {};
   }
 
-  async findMany(filter: any = [], fields: string | string[] = "", order: string = "", limit: number | string = ""): Promise<any[]> {
+  async findMany(filter: any = null, fields: string | string[] = "", order: string = "", limit: number | string = ""): Promise<any[]> {
     this.query.addFilter(filter);
     this.query.setFields(fields);
     this.query.setLimit(limit);

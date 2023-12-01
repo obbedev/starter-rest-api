@@ -4,6 +4,12 @@ import { Update } from "../database/operation/update.js";
 import { Delete } from "../database/operation/delete.js";
 import { DataModel } from "../model/data.model.js";
 import { Filter } from "../database/operation/filter.js";
+import { toDotCase } from "../utils/helper.js";
+import { promises as fsPromises } from 'fs';
+import { fileURLToPath, pathToFileURL } from 'url';
+import path from 'path';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 export const getTableItem = async (req, res) => {
     const table = req.params.table;
     const id = req.params.id;
@@ -19,6 +25,17 @@ export const getTableItems = async (req, res) => {
     const table = params.table;
     const fields = req.query?.fields;
     const order = req.query?.order;
+    //check if table controller exists and method
+    //move to middleware
+    let controllerName = toDotCase(table);
+    let hasController = await controllerExists(controllerName, "getItems");
+    if (hasController) {
+        let controllerObject = await getControllerFromTable(controllerName);
+        if (controllerObject) {
+            controllerObject["getItems"](req, res);
+            return;
+        }
+    }
     //calculate limit/offset
     const page = parseInt(req.query.page) || 1;
     const size = parseInt(req.query.page_size) || 10;
@@ -94,3 +111,37 @@ export const deleteItem = async (req, res) => {
         res.status(200).json(results);
     });
 };
+async function controllerExists(controllerName, functionName = null) {
+    try {
+        const controllerPath = path.join(__dirname, `${controllerName}.controller.ts`);
+        await fsPromises.access(controllerPath);
+        console.log("CONTROLLER EXISTS", `./${controllerName}.controller.ts`);
+        if (functionName) {
+            const controllerPathUrl = pathToFileURL(controllerPath);
+            const controllerModule = await import(controllerPathUrl.toString());
+            if (controllerModule && typeof controllerModule[functionName] === 'function') {
+                console.log(`El controlador ${controllerName} existe y contiene la función ${functionName}.`);
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        return true;
+    }
+    catch (error) {
+        console.error(`Error al cargar el controlador: ${error.message}`);
+    }
+}
+async function getControllerFromTable(controllerName) {
+    try {
+        const controllerPath = path.join(__dirname, `${controllerName}.controller.ts`);
+        await fsPromises.access(controllerPath);
+        const controllerPathUrl = pathToFileURL(controllerPath);
+        const controllerModule = await import(controllerPathUrl.toString());
+        return controllerModule;
+    }
+    catch (error) {
+        console.error(`Error al cargar el controlador: ${error.message}`);
+    }
+}

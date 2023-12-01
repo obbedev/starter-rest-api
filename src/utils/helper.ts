@@ -30,3 +30,8 @@ export const getTmpPath = () => {
   }
   return uploadFolder;
 }
+
+export const toDotCase = (inputString) => {
+  const dotCaseString = inputString.replace(/[-_]/g, '.');
+  return dotCaseString;
+}
