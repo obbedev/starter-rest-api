@@ -120,7 +120,7 @@ async function controllerExists(controllerName, functionName = null) {
                 return false;
             }
         }
-        console.log("CONTROLLER EXISTS", `./${controllerName}.controller.ts`);
+        console.log("CONTROLLER EXISTS", controllerPath);
         if (functionName) {
             const controllerPathUrl = pathToFileURL(controllerPath);
             const controllerModule = await import(controllerPathUrl.toString());
@@ -157,6 +157,7 @@ async function fileExists(path) {
         return true;
     }
     catch (error) {
+        console.error(`El archivo no existe: ${path}`, error);
         return false;
     }
 }
