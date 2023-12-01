@@ -163,6 +163,7 @@ async function getControllerFromTable(controllerName){
 async function fileExists(path: string): Promise<boolean> {
   try {
     await fsPromises.access(path);
+    console.error(`El archivo existe: ${path}`);
     return true;
   } catch (error) {
     return false;
