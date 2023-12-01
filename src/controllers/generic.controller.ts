@@ -124,9 +124,9 @@ export const deleteItem = async (req, res) => {
 
 async function controllerExists(controllerName, functionName = null) {
   try {
-    let controllerPath = path.join(__dirname, `${controllerName}.controller.ts`);
+    let controllerPath = path.join(__dirname, `${controllerName}.controller.js`);
     if(await !fileExists(controllerPath)){
-      controllerPath = path.join(__dirname, `${controllerName}.controller.js`);
+      controllerPath = path.join(__dirname, `${controllerName}.controller.ts`);
       if(await !fileExists(controllerPath)){
         return false;
       }
@@ -162,6 +162,7 @@ async function getControllerFromTable(controllerName){
 
 async function fileExists(path: string): Promise<boolean> {
   try {
+    console.error(`El archivo existe??: ${path}`);
     await fsPromises.access(path);
     console.error(`El archivo existe: ${path}`);
     return true;
