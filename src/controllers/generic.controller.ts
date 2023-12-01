@@ -124,8 +124,13 @@ export const deleteItem = async (req, res) => {
 
 async function controllerExists(controllerName, functionName = null) {
   try {
-    const controllerPath = path.join(__dirname, `${controllerName}.controller.ts`);
-    await fsPromises.access(controllerPath);
+    let controllerPath = path.join(__dirname, `${controllerName}.controller.ts`);
+    if(await !fileExists(controllerPath)){
+      controllerPath = path.join(__dirname, `${controllerName}.controller.js`);
+      if(await !fileExists(controllerPath)){
+        return false;
+      }
+    }
     console.log("CONTROLLER EXISTS",`./${controllerName}.controller.ts`);
     if(functionName){
       const controllerPathUrl = pathToFileURL(controllerPath);
@@ -152,5 +157,14 @@ async function getControllerFromTable(controllerName){
     return controllerModule;
   } catch (error) {
     console.error(`Error al cargar el controlador: ${error.message}`);
+  }
+}
+
+async function fileExists(path: string): Promise<boolean> {
+  try {
+    await fsPromises.access(path);
+    return true;
+  } catch (error) {
+    return false;
   }
 }
