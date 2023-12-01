@@ -125,10 +125,12 @@ export const deleteItem = async (req, res) => {
 async function controllerExists(controllerName, functionName = null) {
   try {
     let controllerPath = path.join(__dirname, `${controllerName}.controller.js`);
-    if(await !fileExists(controllerPath)){
+    let controllerExists = await !fileExists(controllerPath);
+    if(!controllerExists){
+      return false;
+      //TODO
       controllerPath = path.join(__dirname, `${controllerName}.controller.ts`);
       if(await !fileExists(controllerPath)){
-        return false;
       }
     }
     console.log("CONTROLLER EXISTS",controllerPath);
