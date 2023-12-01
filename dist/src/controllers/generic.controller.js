@@ -143,7 +143,8 @@ async function controllerExists(controllerName, functionName = null) {
 }
 async function getControllerFromTable(controllerName) {
     try {
-        const controllerPath = path.join(__dirname, `${controllerName}.controller.ts`);
+        //TODO if local ts
+        const controllerPath = path.join(__dirname, `${controllerName}.controller.js`);
         await fsPromises.access(controllerPath);
         const controllerPathUrl = pathToFileURL(controllerPath);
         const controllerModule = await import(controllerPathUrl.toString());
