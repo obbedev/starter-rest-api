@@ -29,21 +29,7 @@ export const getTableItems = async (req, res) => {
   const size = parseInt(req.query.page_size) || 10;
   const offset = (page - 1) * size;
   const limit = `${size},${offset}`;
-  //any field in query that is not order,fields,page,page_size
-  //TODO need complex filter with operators
-  //TODO extract function
-  const filter = new Filter();
-  const propertiesToOmit = ["fields", "order", "page", "page_size"];
-  const newObj = { ...req.query };
-  propertiesToOmit.forEach(prop => { delete newObj[prop]; });
-  for (const key in newObj) {
-    if (Object.prototype.hasOwnProperty.call(newObj, key)) {
-      const filterValue = newObj[key];
-      if ((filterValue !== null && filterValue !== undefined && filterValue !== '')) {
-        filter.addEqualFilter(key, filterValue);
-      }
-    }
-  }
+  let filter = getRequestFilter(req);
   const db = getConnection();
   let dataModel = new DataModel(table, db);
   let result = await dataModel.findMany(filter, fields, order, limit);
@@ -103,7 +89,7 @@ export const deleteItem = async (req, res) => {
   })
 };
 
-export const findRequestController = async (req, res) => {
+export const findRequestController = async (req, res, next, functionName) => {
   //check if table controller exists and method
   //move to middleware
   const table = req.params.table;
@@ -111,9 +97,26 @@ export const findRequestController = async (req, res) => {
   let hasController = await controllerExists(controllerName,"getItems");
   if(hasController){
      let controllerObject = await getControllerFromTable(controllerName);
-     if(controllerObject){
-      controllerObject["getItems"](req,res);
+     if(controllerObject && functionName){
+      controllerObject[functionName](req,res);
       return;
      }
   }
+}
+
+function getRequestFilter(request){
+  //any field in query that is not order,fields,page,page_size
+  const filter = new Filter();
+  const propertiesToOmit = ["fields", "order", "page", "page_size"];
+  const newObj = { ...request.query };
+  propertiesToOmit.forEach(prop => { delete newObj[prop]; });
+  for (const key in newObj) {
+    if (Object.prototype.hasOwnProperty.call(newObj, key)) {
+      const filterValue = newObj[key];
+      if ((filterValue !== null && filterValue !== undefined && filterValue !== '')) {
+        filter.addEqualFilter(key, filterValue);
+      }
+    }
+  }
+  return filter;
 }

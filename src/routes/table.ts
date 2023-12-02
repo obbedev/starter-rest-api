@@ -25,9 +25,15 @@ export class TableRoutes {
       res.status(200).json(result)
     });
     //router - middlware that finds the specific controller
-    router.get("/:table", isLogged, findRequestController, getTableItems);
+    router.get("/:table", isLogged, this.findRequest("getItems"), getTableItems);
     router.get("/:table/:id", isLogged, getTableItem);
     router.post("/:table", isLogged, insert);
     router.put("/:table/:id", isLogged, update);
   }
+
+  private findRequest = (functionName) => {
+    return (req, res, next) => {
+      findRequestController(req, res, next, functionName)
+    };
+  };
 }
