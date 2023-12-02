@@ -20,17 +20,6 @@ export const getTableItems = async (req, res) => {
     const table = params.table;
     const fields = req.query?.fields;
     const order = req.query?.order;
-    //check if table controller exists and method
-    //move to middleware
-    let controllerName = toDotCase(table);
-    let hasController = await controllerExists(controllerName, "getItems");
-    if (hasController) {
-        let controllerObject = await getControllerFromTable(controllerName);
-        if (controllerObject) {
-            controllerObject["getItems"](req, res);
-            return;
-        }
-    }
     //calculate limit/offset
     const page = parseInt(req.query.page) || 1;
     const size = parseInt(req.query.page_size) || 10;
@@ -105,4 +94,18 @@ export const deleteItem = async (req, res) => {
         }
         res.status(200).json(results);
     });
+};
+export const findRequestController = async (req, res) => {
+    //check if table controller exists and method
+    //move to middleware
+    const table = req.params.table;
+    let controllerName = toDotCase(table);
+    let hasController = await controllerExists(controllerName, "getItems");
+    if (hasController) {
+        let controllerObject = await getControllerFromTable(controllerName);
+        if (controllerObject) {
+            controllerObject["getItems"](req, res);
+            return;
+        }
+    }
 };

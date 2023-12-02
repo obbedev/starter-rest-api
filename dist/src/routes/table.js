@@ -1,5 +1,5 @@
 import router from "./router.js";
-import { getTableItem, getTableItems, insert, update } from "../controllers/generic.controller.js";
+import { findRequestController, getTableItem, getTableItems, insert, update } from "../controllers/generic.controller.js";
 import { isLogged } from "../utils/auth.js";
 import { getConnection } from "../database/database.js";
 import { DataModel } from "../model/data.model.js";
@@ -17,7 +17,8 @@ export class TableRoutes {
             let result = await a.findOne(2);
             res.status(200).json(result);
         });
-        router.get("/:table", isLogged, getTableItems);
+        //router - middlware that finds the specific controller
+        router.get("/:table", isLogged, findRequestController, getTableItems);
         router.get("/:table/:id", isLogged, getTableItem);
         router.post("/:table", isLogged, insert);
         router.put("/:table/:id", isLogged, update);

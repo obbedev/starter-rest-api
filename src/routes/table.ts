@@ -1,5 +1,6 @@
 import router from "./router.js";
 import {
+  findRequestController,
   getTableItem,
   getTableItems,
   insert,
@@ -16,14 +17,15 @@ export class TableRoutes {
     this.router = router;
   }
   registerRoutes() {
-    router.get("/testapi",async (req,res)=>{
+    router.get("/testapi", async (req, res) => {
       let db = getConnection();
-      let a = new DataModel("event",db);
+      let a = new DataModel("event", db);
       let filter = new Filter();
       let result = await a.findOne(2);
       res.status(200).json(result)
     });
-    router.get("/:table", isLogged, getTableItems);
+    //router - middlware that finds the specific controller
+    router.get("/:table", isLogged, findRequestController, getTableItems);
     router.get("/:table/:id", isLogged, getTableItem);
     router.post("/:table", isLogged, insert);
     router.put("/:table/:id", isLogged, update);
