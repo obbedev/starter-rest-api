@@ -4,13 +4,7 @@ import { Update } from "../database/operation/update.js";
 import { Delete } from "../database/operation/delete.js";
 import { DataModel } from "../model/data.model.js";
 import { Filter } from "../database/operation/filter.js";
-import { toDotCase } from "../utils/helper.js";
-import { promises as fsPromises } from 'fs';
-import { fileURLToPath,pathToFileURL } from 'url';
-import path from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { controllerExists, getControllerFromTable, toDotCase } from "../utils/helper.js";
 
 export const getTableItem = async (req, res) => {
   const table = req.params.table
@@ -122,56 +116,3 @@ export const deleteItem = async (req, res) => {
   })
 };
 
-async function controllerExists(controllerName, functionName = null) {
-  try {
-    let controllerPath = path.join(__dirname, `${controllerName}.controller.js`);
-    let controllerExists = await fileExists(controllerPath);
-    if(!controllerExists){
-      console.log("return el archivo no existe",controllerPath);
-      return false;
-      //TODO
-      controllerPath = path.join(__dirname, `${controllerName}.controller.ts`);
-      if(await !fileExists(controllerPath)){
-      }
-    }
-    console.log("CONTROLLER EXISTS",controllerPath);
-    if(functionName){
-      const controllerPathUrl = pathToFileURL(controllerPath);
-      const controllerModule = await import(controllerPathUrl.toString());
-      if (controllerModule && typeof controllerModule[functionName] === 'function') {
-        console.log(`El controlador ${controllerName} existe y contiene la función ${functionName}.`);
-        return true;
-      }else{
-        return false;
-      }
-    }
-    return true;
-  } catch (error) {
-    console.error(`Error al cargar el controlador: ${error.message}`);
-  }
-}
-
-async function getControllerFromTable(controllerName){
-  try {
-    //TODO if local ts
-    const controllerPath = path.join(__dirname, `${controllerName}.controller.js`);
-    await fsPromises.access(controllerPath);
-    const controllerPathUrl = pathToFileURL(controllerPath);
-    const controllerModule = await import(controllerPathUrl.toString());
-    return controllerModule;
-  } catch (error) {
-    console.error(`Error al cargar el controlador: ${error.message}`);
-  }
-}
-
-async function fileExists(path: string): Promise<boolean> {
-  try {
-    console.error(`El archivo existe??: ${path}`);
-    await fsPromises.access(path);
-    console.error(`El archivo existe: ${path}`);
-    return true;
-  } catch (error) {
-    console.error(`El archivo no existe: ${path}`,error);
-    return false;
-  }
-}
