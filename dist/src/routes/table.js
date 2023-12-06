@@ -1,5 +1,5 @@
 import router from "./router.js";
-import { findRequestController } from "../controllers/generic.controller.js";
+import { findRequestController } from "../controllers/controller.js";
 import { isLogged } from "../utils/auth.js";
 import { getConnection } from "../database/database.js";
 import { DataModel } from "../model/data.model.js";
@@ -30,8 +30,8 @@ export class TableRoutes {
             res.status(200).json(result);
         });
         router.get("/:table", isLogged, this.findRequest("getItems"), this.handleApiControllerRequest("getItems"));
-        router.get("/:table/:id", isLogged, this.handleApiControllerRequest("getItem"));
-        router.post("/:table", isLogged, this.handleApiControllerRequest("insert"));
-        router.put("/:table/:id", isLogged, this.handleApiControllerRequest("update"));
+        router.get("/:table/:id", isLogged, this.findRequest("getItem"), this.handleApiControllerRequest("getItem"));
+        router.post("/:table", isLogged, this.findRequest("insert"), this.handleApiControllerRequest("insert"));
+        router.put("/:table/:id", isLogged, this.findRequest("update"), this.handleApiControllerRequest("update"));
     }
 }
