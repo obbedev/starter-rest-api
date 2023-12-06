@@ -28,6 +28,7 @@ export class ApiController {
       const db = getConnection();
       let dataModel = new DataModel(table, db);
       let result = await dataModel.findMany(filter, fields, order, limit);
+      result = result.map(this.formatItemRow);
       this.responseObject.status(200).json(result)
     } catch (error) {
       console.log(error);
@@ -48,6 +49,7 @@ export class ApiController {
         let dataModel = new DataModel(table, db);
         let result = await dataModel.findOne(id, fields);
         console.log(result);
+        result = this.formatItemRow(result);
         this.responseObject.status(200).json(result);
       } else {
         this.responseObject.status(400).json({ error: "Id paramter is missing" });
@@ -121,6 +123,10 @@ export class ApiController {
       this.responseObject.status(400).json({ error: "Id paramter is missing" });
     }
   };
+
+  formatItemRow(itemRow: {}): {} {
+    return itemRow;
+  }
 
   getRequestFilter() {
     let filter = new Filter();
