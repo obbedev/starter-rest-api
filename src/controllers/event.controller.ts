@@ -1,5 +1,4 @@
 import { getConnection } from "../database/database.js";
-import { DataModel } from "../model/data.model.js";
 import { Event } from "../model/event.model.js";
 import { ApiController } from "./api.controller.js";
 
