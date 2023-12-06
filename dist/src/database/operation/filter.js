@@ -45,14 +45,11 @@ export class Filter {
                         return filterItem;
                     }
                     return '';
-                });
-                arrayFilters = arrayFilters.filter((filter) => !!filter);
+                }).filter(Boolean);
                 return arrayFilters.join(` ${this.logicalOperator} `);
             }
             return `${filter.field} ${filter.operator} '${filter.value}'`;
-        });
-        filterClauses = filterClauses.filter((filter) => !!filter);
-        ;
+        }).filter(Boolean);
         return filterClauses.join(` ${this.logicalOperator} `);
     }
 }
