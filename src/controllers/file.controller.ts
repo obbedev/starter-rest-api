@@ -4,6 +4,7 @@ import { AwsStorageService } from "../services/provider/storage/aws.storage.serv
 export const uploadFile = async (req, res) => {
     console.log(req.file)
     try {
+        //TODO dynamic storage factory
         let storageService = new AwsStorageService();
         let service = new FileService(storageService,null);
         let id = await service.createFile(req.file.originalname, req.file.path, req.file.mimetype);
@@ -20,6 +21,7 @@ export const getFile = async (req, res) => {
     console.log(req.file)
     try {
         let { id } = req.params;
+        //TODO dynamic storage factory from file id
         let storageService = new AwsStorageService();
         let service = new FileService(storageService,null);
         let fileUrl = await service.getFile(id);

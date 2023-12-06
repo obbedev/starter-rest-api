@@ -1,6 +1,6 @@
 export class Fields {
     constructor(fields, allIfNone = false) {
-        this.fields = [];
+        this.fields = null;
         this.allIfNone = false;
         this.fields = fields;
         this.allIfNone = allIfNone;
@@ -8,9 +8,12 @@ export class Fields {
     addField(field) {
         this.fields.push(field);
     }
+    setFields(fields) {
+        this.fields = fields;
+    }
     generateFields() {
         let query = '';
-        if (!this.fields && this.allIfNone) {
+        if (!(this.fields || this.fields?.length > 0) && this.allIfNone) {
             return "*";
         }
         if (Array.isArray(this.fields)) {

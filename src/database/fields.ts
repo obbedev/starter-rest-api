@@ -1,5 +1,5 @@
 export class Fields {
-    private fields = [];
+    private fields = null;
     private allIfNone = false;
     constructor(fields,allIfNone = false) {
         this.fields = fields;
@@ -9,10 +9,14 @@ export class Fields {
     addField(field){
         this.fields.push(field);
     }
+    
+    setFields(fields:string){
+        this.fields = fields;
+    }
 
     generateFields() {
         let query = '';
-        if(!this.fields && this.allIfNone){
+        if(!(this.fields || this.fields?.length>0) && this.allIfNone){
             return "*";
         }
         if (Array.isArray(this.fields)) {

@@ -35,12 +35,18 @@ export class ApiController {
             const params = this.requestObj.params;
             const table = params.table;
             const id = params.id;
-            let fields = this.getRequestFields();
-            const db = getConnection();
-            let dataModel = new DataModel(table, db);
-            let result = await dataModel.findOne(id, fields);
-            console.log(result);
-            this.responseObject.status(200).json(result);
+            console.log("API CONTROLLER GET ITEMS", table, id);
+            if (id && !isNaN(id)) {
+                let fields = this.getRequestFields();
+                const db = getConnection();
+                let dataModel = new DataModel(table, db);
+                let result = await dataModel.findOne(id, fields);
+                console.log(result);
+                this.responseObject.status(200).json(result);
+            }
+            else {
+                this.responseObject.status(400).json({ error: "Id paramter is missing" });
+            }
         }
         catch (error) {
             console.log(error);
@@ -143,7 +149,10 @@ export class ApiController {
     getRequestFields() {
         let fields = this.requestObj.query?.fields;
         if (!fields) {
-            fields = "*";
+            fields = "*"; //should not set this here
+        }
+        else {
+            fields = fields.split(",");
         }
         return fields;
     }
