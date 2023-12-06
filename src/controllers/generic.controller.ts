@@ -4,7 +4,8 @@ import { Update } from "../database/operation/update.js";
 import { Delete } from "../database/operation/delete.js";
 import { DataModel } from "../model/data.model.js";
 import { Filter } from "../database/operation/filter.js";
-import { controllerExists, getControllerFromTable, toDotCase } from "../utils/helper.js";
+import { controllerExists, createControllerInstance, dotCaseToPascalCase, getControllerFromTable, getControllerPath, toDotCase } from "../utils/helper.js";
+import { ApiController } from "./api.controller.js";
 
 export const getTableItem = async (req, res) => {
   const table = req.params.table
@@ -90,21 +91,23 @@ export const deleteItem = async (req, res) => {
 };
 
 export const findRequestController = async (req, res, next, functionName) => {
-  //check if table controller exists and method
-  //move to middleware
   const table = req.params.table;
   let controllerName = toDotCase(table);
-  let hasController = await controllerExists(controllerName,"getItems");
-  if(hasController){
-     let controllerObject = await getControllerFromTable(controllerName);
-     if(controllerObject && functionName){
-      controllerObject[functionName](req,res);
+  let hasController = await controllerExists(controllerName, functionName);
+  if (hasController) {
+    let controllerObject = await createControllerInstance(controllerName, req, res, next);
+    console.log("create instance result", controllerObject);
+    if (controllerObject instanceof ApiController && controllerObject && functionName) {
+      controllerObject[functionName]();
       return;
-     }
+    }
+  } else {
+    console.log("findRequestController no tiene controller", table)
   }
+  next();
 }
 
-function getRequestFilter(request){
+function getRequestFilter(request) {
   //any field in query that is not order,fields,page,page_size
   const filter = new Filter();
   const propertiesToOmit = ["fields", "order", "page", "page_size"];

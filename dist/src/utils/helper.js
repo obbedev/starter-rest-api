@@ -34,6 +34,10 @@ export const toDotCase = (inputString) => {
     const dotCaseString = inputString.replace(/[-_]/g, '.');
     return dotCaseString;
 };
+export const dotCaseToPascalCase = (inputString) => {
+    const camelCaseString = inputString.replace(/\.(\w)/g, (match, char) => char.toUpperCase());
+    return camelCaseString.charAt(0).toUpperCase() + camelCaseString.slice(1);
+};
 export const projectRootPath = () => {
     const __filename = fileURLToPath(import.meta.url);
     console.log("filename", __filename);
@@ -61,12 +65,14 @@ export async function controllerExists(controllerName, functionName = null) {
         console.log("CONTROLLER EXISTS", controllerPath);
         if (functionName) {
             const controllerPathUrl = pathToFileURL(controllerPath);
-            const controllerModule = await import(controllerPathUrl.toString());
+            const controllerModule = await createControllerInstance(controllerName);
+            console.log(`El controlador ${controllerName} existe`, controllerModule);
             if (controllerModule && typeof controllerModule[functionName] === 'function') {
                 console.log(`El controlador ${controllerName} existe y contiene la función ${functionName}.`);
                 return true;
             }
             else {
+                console.log(`El controlador ${controllerName} existe y no contiene la función ${functionName}.`);
                 return false;
             }
         }
@@ -74,6 +80,7 @@ export async function controllerExists(controllerName, functionName = null) {
     }
     catch (error) {
         console.error(`Error al cargar el controlador: ${error.message}`);
+        throw error;
     }
 }
 export async function getControllerFromTable(controllerName) {
@@ -103,7 +110,6 @@ export async function fileExists(path) {
 export function getControllerPath(controllerName) {
     controllerName = toDotCase(controllerName);
     let projectSrc = projectSrcPath();
-    //issue with ts/js - IMPROVE
     let extension = 'ts';
     if (isProEnv()) {
         extension = "js";
@@ -118,4 +124,28 @@ export function isProEnv() {
 }
 export function getEnv() {
     return process.env.ENV;
+}
+export async function createControllerInstance(className, ...args) {
+    try {
+        const path = getControllerPath(className);
+        const controllerPathUrl = pathToFileURL(path);
+        const modulo = await import(controllerPathUrl.toString());
+        console.log("createControllerInstance module", modulo);
+        //could be camelcase,dashcase...
+        className = dotCaseToPascalCase(className);
+        const Clase = modulo[className + "Controller"];
+        console.log("createControllerInstance clase", Clase, typeof Clase);
+        if (typeof Clase === 'function') {
+            console.error(`La clase '${className}' existe.`);
+            return new Clase(...args);
+        }
+        else {
+            console.error(`La clase '${className}' no existe.`);
+            return null;
+        }
+    }
+    catch (error) {
+        console.error(`Error al importar la clase '${className}':`, error);
+        return null;
+    }
 }
