@@ -129,15 +129,15 @@ export async function createControllerInstance(className, ...args) {
     try {
         const path = getControllerPath(className);
         const controllerPathUrl = pathToFileURL(path);
-        const modulo = await import(controllerPathUrl.toString());
-        console.log("createControllerInstance module", modulo);
+        const controllerModule = await import(controllerPathUrl.toString());
+        console.log("createControllerInstance module", controllerModule);
         //could be camelcase,dashcase...
         className = dotCaseToPascalCase(className);
-        const Clase = modulo[className + "Controller"];
-        console.log("createControllerInstance clase", Clase, typeof Clase);
-        if (typeof Clase === 'function') {
+        const controllerClass = controllerModule[className + "Controller"];
+        console.log("createControllerInstance clase", controllerClass, typeof controllerClass);
+        if (typeof controllerClass === 'function') {
             console.error(`La clase '${className}' existe.`);
-            return new Clase(...args);
+            return new controllerClass(...args);
         }
         else {
             console.error(`La clase '${className}' no existe.`);

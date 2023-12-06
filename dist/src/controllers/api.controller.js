@@ -121,19 +121,24 @@ export class ApiController {
     }
     ;
     getRequestFilter() {
-        const filter = new Filter();
+        let filter = new Filter();
+        //get from enum/constants
         const propertiesToOmit = ["fields", "order", "page", "page_size"];
         const newObj = { ...this.requestObj.query };
         propertiesToOmit.forEach(prop => { delete newObj[prop]; });
-        for (const key in newObj) {
-            if (Object.prototype.hasOwnProperty.call(newObj, key)) {
-                const filterValue = newObj[key];
+        for (const field in newObj) {
+            if (Object.prototype.hasOwnProperty.call(newObj, field)) {
+                const filterValue = newObj[field];
                 if ((filterValue !== null && filterValue !== undefined && filterValue !== '')) {
-                    filter.addEqualFilter(key, filterValue);
+                    let operator = '='; //get operator >,<,=... from request
+                    this.addModelFilter(filter, field, filterValue, operator);
                 }
             }
         }
         return filter;
+    }
+    addModelFilter(filter, field, filterValue, operator) {
+        filter.addOperatorFilter(field, filterValue, operator);
     }
     getRequestOrder() {
         const order = this.requestObj.query?.order;
@@ -141,19 +146,20 @@ export class ApiController {
     }
     getRequestLimit() {
         const page = parseInt(this.requestObj.query.page) || 1;
-        const size = parseInt(this.requestObj.query.page_size) || 10;
+        const size = parseInt(this.requestObj.query.page_size) || this.getMaxItems();
+        ;
         const offset = (page - 1) * size;
         const limit = `${size},${offset}`;
         return { page, size, offset, limit };
     }
     getRequestFields() {
         let fields = this.requestObj.query?.fields;
-        if (!fields) {
-            fields = "*"; //should not set this here
-        }
-        else {
+        if (fields) {
             fields = fields.split(",");
         }
         return fields;
+    }
+    getMaxItems() {
+        return 100;
     }
 }

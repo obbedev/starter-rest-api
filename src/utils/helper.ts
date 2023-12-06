@@ -37,7 +37,7 @@ export const toDotCase = (inputString) => {
   return dotCaseString;
 }
 
-export const dotCaseToPascalCase = (inputString) =>{
+export const dotCaseToPascalCase = (inputString) => {
   const camelCaseString = inputString.replace(/\.(\w)/g, (match, char) => char.toUpperCase());
   return camelCaseString.charAt(0).toUpperCase() + camelCaseString.slice(1);
 }
@@ -72,7 +72,7 @@ export async function controllerExists(controllerName, functionName = null) {
     if (functionName) {
       const controllerPathUrl = pathToFileURL(controllerPath);
       const controllerModule = await createControllerInstance(controllerName);
-      console.log(`El controlador ${controllerName} existe`,controllerModule);
+      console.log(`El controlador ${controllerName} existe`, controllerModule);
       if (controllerModule && typeof controllerModule[functionName] === 'function') {
         console.log(`El controlador ${controllerName} existe y contiene la función ${functionName}.`);
         return true;
@@ -112,25 +112,25 @@ export async function fileExists(path: string): Promise<boolean> {
   }
 }
 
-export function getControllerPath(controllerName){
+export function getControllerPath(controllerName) {
   controllerName = toDotCase(controllerName);
   let projectSrc = projectSrcPath();
   let extension = 'ts';
-  if(isProEnv()){
+  if (isProEnv()) {
     extension = "js";
   }
   return path.join(projectSrc, "controllers", `${controllerName}.controller.${extension}`);
 }
 
-export function isLocalEnv(){
-  return getEnv()=="local";
+export function isLocalEnv() {
+  return getEnv() == "local";
 }
 
-export function isProEnv(){
-  return getEnv()=="pro";
+export function isProEnv() {
+  return getEnv() == "pro";
 }
 
-export function getEnv(){
+export function getEnv() {
   return process.env.ENV;
 }
 
@@ -138,16 +138,16 @@ export async function createControllerInstance(className, ...args) {
   try {
     const path = getControllerPath(className)
     const controllerPathUrl = pathToFileURL(path);
-    const modulo = await import(controllerPathUrl.toString());
-    console.log("createControllerInstance module",modulo)
+    const controllerModule = await import(controllerPathUrl.toString());
+    console.log("createControllerInstance module", controllerModule)
     //could be camelcase,dashcase...
     className = dotCaseToPascalCase(className);
-    const Clase = modulo[className+"Controller"];
-    
-    console.log("createControllerInstance clase",Clase,typeof Clase)
-    if (typeof Clase === 'function') {
+    const controllerClass = controllerModule[className + "Controller"];
+
+    console.log("createControllerInstance clase", controllerClass, typeof controllerClass)
+    if (typeof controllerClass === 'function') {
       console.error(`La clase '${className}' existe.`);
-      return new Clase(...args);
+      return new controllerClass(...args);
     } else {
       console.error(`La clase '${className}' no existe.`);
       return null;
