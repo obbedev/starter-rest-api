@@ -29,7 +29,6 @@ export class TableRoutes {
             let result = await a.findOne(2);
             res.status(200).json(result);
         });
-        //router - middlware that finds the specific controller
         router.get("/:table", isLogged, this.findRequest("getItems"), this.handleApiControllerRequest("getItems"));
         router.get("/:table/:id", isLogged, this.handleApiControllerRequest("getItem"));
         router.post("/:table", isLogged, this.handleApiControllerRequest("insert"));

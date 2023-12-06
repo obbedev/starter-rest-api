@@ -1,4 +1,5 @@
 import { getConnection } from "../database/database.js";
+import { Delete } from "../database/operation/delete.js";
 import { Filter } from "../database/operation/filter.js";
 import { Insert } from "../database/operation/insert.js";
 import { Update } from "../database/operation/update.js";
@@ -90,6 +91,27 @@ export class ApiController {
           throw error
         }
         this.responseObject.status(200).json(results);
+      })
+    } else {
+      this.responseObject.status(400).json({ error: "Id paramter is missing" });
+    }
+  };
+
+  async deleteItem() {
+    const params = this.requestObj.params;
+    const table = params.table;
+    const id = params.id;
+    if (id && !isNaN(id)) {
+      let query = new Delete(table);
+      let filter = new Filter();
+      filter.addEqualFilter("id", id);
+      query.addFilter(filter);
+      const db = getConnection();
+      await db.query(query.toString(), (error, results) => {
+        if (error) {
+          throw error
+        }
+        this.responseObject.status(200).json(results)
       })
     } else {
       this.responseObject.status(400).json({ error: "Id paramter is missing" });
