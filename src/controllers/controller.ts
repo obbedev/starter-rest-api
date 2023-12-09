@@ -6,7 +6,6 @@ export const findRequestController = async (req, res, next, functionName) => {
     const table = req.params.table;
     let controllerName = toDotCase(table);
     let controllerObject = await createControllerInstance(controllerName, req, res, next);
-    console.log("create instance result", controllerObject);
     if (controllerObject instanceof ApiController && controllerObject && functionName) {
       controllerObject[functionName]();
       return;
