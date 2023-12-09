@@ -1,8 +1,8 @@
-import { getConnection } from "../database/database.js";
-import { Delete } from "../database/operation/delete.js";
-import { Filter } from "../database/operation/filter.js";
-import { Insert } from "../database/operation/insert.js";
-import { Update } from "../database/operation/update.js";
+import { getConnection } from "../core/database/database.js";
+import { Delete } from "../core/database/operation/delete.js";
+import { Filter } from "../core/database/operation/filter.js";
+import { Insert } from "../core/database/operation/insert.js";
+import { Update } from "../core/database/operation/update.js";
 import { DataModel } from "../model/data.model.js";
 
 export class ApiController {

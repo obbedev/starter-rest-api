@@ -1,6 +1,6 @@
-import { Query } from "../database/operation/query.js";
-import { getConnection } from "../database/database.js";
-import { Filter } from "../database/operation/filter.js";
+import { Query } from "../core/database/operation/query.js";
+import { getConnection } from "../core/database/database.js";
+import { Filter } from "../core/database/operation/filter.js";
 import { SessionService } from "../services/session.service.js";
 
 export const isLogged = async (req, res, next) => {

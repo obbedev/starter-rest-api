@@ -1,9 +1,9 @@
-import { getConnection } from "../database/database.js";
-import { Query } from "../database/operation/query.js";
-import { Insert } from "../database/operation/insert.js";
-import { Update } from "../database/operation/update.js";
+import { getConnection } from "../core/database/database.js";
+import { Query } from "../core/database/operation/query.js";
+import { Insert } from "../core/database/operation/insert.js";
+import { Update } from "../core/database/operation/update.js";
 import { hash } from "../utils/helper.js";
-import { Filter } from "../database/operation/filter.js";
+import { Filter } from "../core/database/operation/filter.js";
 
 export class AuthService{
     async login(email,password){

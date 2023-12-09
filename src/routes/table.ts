@@ -1,9 +1,9 @@
 import router from "./router.js";
 import { findRequestController } from "../controllers/controller.js";
 import { isLogged } from "../utils/auth.js";
-import { getConnection } from "../database/database.js";
+import { getConnection } from "../core/database/database.js";
 import { DataModel } from "../model/data.model.js";
-import { Filter } from "../database/operation/filter.js";
+import { Filter } from "../core/database/operation/filter.js";
 import { ApiController } from "../controllers/api.controller.js";
 
 export class TableRoutes {

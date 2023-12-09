@@ -1,8 +1,8 @@
-import { getConnection } from "../database/database.js";
-import { Insert } from "../database/operation/insert.js";
+import { getConnection } from "../core/database/database.js";
+import { Insert } from "../core/database/operation/insert.js";
 import fs from 'fs/promises';
-import { Query } from "../database/operation/query.js";
-import { Filter } from "../database/operation/filter.js";
+import { Query } from "../core/database/operation/query.js";
+import { Filter } from "../core/database/operation/filter.js";
 import Path from "path";
 export class FileService {
     /**

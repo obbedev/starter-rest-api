@@ -1,4 +1,4 @@
-import { getConnection } from "../database/database.js";
+import { getConnection } from "../core/database/database.js";
 import { WearEvent } from "../model/wear.event.js";
 import { ApiController } from "./api.controller.js";
 export class WearEventController extends ApiController {

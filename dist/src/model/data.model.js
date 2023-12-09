@@ -1,5 +1,5 @@
-import { Query } from '../database/operation/query.js';
-import { Filter } from '../database/operation/filter.js';
+import { Query } from '../core/database/operation/query.js';
+import { Filter } from '../core/database/operation/filter.js';
 /**
  * Base class to accese the object data
  */
