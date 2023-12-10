@@ -12,12 +12,16 @@ export class TableRoutes {
     this.router = router;
   }
   registerRoutes() {
-    router.get("/testapi", async (req, res) => {
-      let db = getConnection();
-      let a = new DataModel("event", db);
-      let filter = new Filter();
-      let result = await a.findOne(2);
-      res.status(200).json(result)
+    router.get("/testapi", async (req, res,next) => {
+      try {
+        let db = getConnection();
+        let a = new DataModel("event", db);
+        let filter = new Filter();
+        let result = await a.findOne(2);
+        res.status(200).json(result)
+      } catch (error) {
+        next(error)
+      }
     });
 
     router.get("/:table", isLogged, this.findRequest("getItems"), this.handleApiControllerRequest("getItems"));

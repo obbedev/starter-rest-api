@@ -1,6 +1,6 @@
 export class CoreException extends Error {
-    private code: number;
-    private publicMessage: string;
+    public code: number;
+    public publicMessage: string;
     constructor(message, code = null, publicMessage = '') {
         super(message);
         //omit all of the stack frames invoked by code inside

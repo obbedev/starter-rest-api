@@ -1,5 +1,5 @@
 import { DatabaseI } from '../core/database/database.interface.js';
-import { DatabaseModelI } from '../interface/model.database.interface.js';
+import { DatabaseModelI } from './interface/model.database.interface.js';
 import { Query } from '../core/database/operation/query.js';
 import { Filter } from '../core/database/operation/filter.js';
 

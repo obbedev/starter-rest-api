@@ -61,66 +61,81 @@ export class ApiController {
   };
 
   async insert() {
-    const params = this.requestObj.params;
-    const table = params.table;
-    const body = this.requestObj.body;
-    let insertValues = body;
-    if (!Array.isArray(insertValues)) {
-      insertValues = [];
-      insertValues.push(body);
-    }
-    let query = new Insert(table, insertValues);
-    console.log(query.toString());
-    const db = getConnection();
-    await db.query(query.toString(), (error, results) => {
-      if (error) {
-        throw error
+    try {
+      const params = this.requestObj.params;
+      const table = params.table;
+      const body = this.requestObj.body;
+      let insertValues = body;
+      if (!Array.isArray(insertValues)) {
+        insertValues = [];
+        insertValues.push(body);
       }
-      this.requestObj.status(200).json(results)
-    })
-  };
-
-  async update() {
-    const params = this.requestObj.params;
-    const table = params.table;
-    const body = this.requestObj.body;
-    const id = params.id;
-    if (id && !isNaN(id)) {
-      let updateValues = body;
-      let query = new Update(table, updateValues);
-      let filter = new Filter();
-      filter.addEqualFilter("id", id);
-      query.addFilter(filter);
+      let query = new Insert(table, insertValues);
+      console.log(query.toString());
       const db = getConnection();
       await db.query(query.toString(), (error, results) => {
         if (error) {
           throw error
         }
-        this.responseObject.status(200).json(results);
+        this.requestObj.status(200).json(results)
       })
-    } else {
-      this.responseObject.status(400).json({ error: "Id paramter is missing" });
+    } catch (error) {
+      console.log(error);
+      this.responseObject.status(500).json({ error: "Internal error" });
+    }
+  };
+
+  async update() {
+    try {
+      const params = this.requestObj.params;
+      const table = params.table;
+      const body = this.requestObj.body;
+      const id = params.id;
+      if (id && !isNaN(id)) {
+        let updateValues = body;
+        let query = new Update(table, updateValues);
+        let filter = new Filter();
+        filter.addEqualFilter("id", id);
+        query.addFilter(filter);
+        const db = getConnection();
+        await db.query(query.toString(), (error, results) => {
+          if (error) {
+            throw error
+          }
+          this.responseObject.status(200).json(results);
+        })
+      } else {
+        this.responseObject.status(400).json({ error: "Id paramter is missing" });
+      }
+    } catch (error) {
+      console.log(error);
+      this.responseObject.status(500).json({ error: "Internal error" });
     }
   };
 
   async deleteItem() {
-    const params = this.requestObj.params;
-    const table = params.table;
-    const id = params.id;
-    if (id && !isNaN(id)) {
-      let query = new Delete(table);
-      let filter = new Filter();
-      filter.addEqualFilter("id", id);
-      query.addFilter(filter);
-      const db = getConnection();
-      await db.query(query.toString(), (error, results) => {
-        if (error) {
-          throw error
-        }
-        this.responseObject.status(200).json(results)
-      })
-    } else {
-      this.responseObject.status(400).json({ error: "Id paramter is missing" });
+    try {
+      const params = this.requestObj.params;
+      const table = params.table;
+      const id = params.id;
+      if (id && !isNaN(id)) {
+        let query = new Delete(table);
+        let filter = new Filter();
+        filter.addEqualFilter("id", id);
+        query.addFilter(filter);
+        const db = getConnection();
+        await db.query(query.toString(), (error, results) => {
+          if (error) {
+            throw error
+          }
+          this.responseObject.status(200).json(results)
+        })
+      } else {
+        this.responseObject.status(400).json({ error: "Id paramter is missing" });
+      }
+    } catch (error) {
+      console.log(error);
+      this.responseObject.status(500).json({ error: "Internal error" });
     }
   };
 
