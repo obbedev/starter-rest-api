@@ -156,7 +156,7 @@ export class ApiController {
           let operator = '='; //get operator >,<,=... from request
           try {
             filterValue = JSON.parse(filterValue);
-          } catch (error) { 
+          } catch (error) {
           }
           this.addModelFilter(filter, field, filterValue, operator)
         }
@@ -168,6 +168,8 @@ export class ApiController {
   addModelFilter(filter: Filter, field, filterValue, operator) {
     if (Array.isArray(filterValue)) {
       filter.addInValues(field, filterValue);
+    } else if (field == "q") {//TODO get dynamic generic search fields
+      filter.addFilter("name like '%" + filterValue + "%'");
     } else {
       filter.addOperatorFilter(field, filterValue, operator);
     }

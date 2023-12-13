@@ -169,6 +169,9 @@ export class ApiController {
         if (Array.isArray(filterValue)) {
             filter.addInValues(field, filterValue);
         }
+        else if (field == "q") { //TODO get dynamic generic search fields
+            filter.addFilter("name like '%" + filterValue + "%'");
+        }
         else {
             filter.addOperatorFilter(field, filterValue, operator);
         }
