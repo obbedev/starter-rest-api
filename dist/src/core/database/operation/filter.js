@@ -20,7 +20,10 @@ export class Filter {
         this.filters.push({ field, value, operator });
     }
     addEqualFilter(field, value) {
-        this.addOperatorFilter(field, value, '=');
+        this.addOperatorFilter(field, "'" + value + "'", '=');
+    }
+    addInValues(field, values) {
+        this.addOperatorFilter(field, "(" + values.join(",") + ")", 'IN');
     }
     getFilterString() {
         if (this.filters.length === 0) {
@@ -48,7 +51,7 @@ export class Filter {
                 }).filter(Boolean);
                 return arrayFilters.join(` ${this.logicalOperator} `);
             }
-            return `${filter.field} ${filter.operator} '${filter.value}'`;
+            return `${filter.field} ${filter.operator} ${filter.value}`;
         }).filter(Boolean);
         return filterClauses.join(` ${this.logicalOperator} `);
     }

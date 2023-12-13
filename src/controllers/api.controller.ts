@@ -151,9 +151,13 @@ export class ApiController {
     propertiesToOmit.forEach(prop => { delete newObj[prop]; });
     for (const field in newObj) {
       if (Object.prototype.hasOwnProperty.call(newObj, field)) {
-        const filterValue = newObj[field];
-        if ((filterValue !== null && filterValue !== undefined && filterValue !== '')) {
+        let filterValue = newObj[field];
+        if (filterValue !== null && filterValue !== undefined && filterValue !== '') {
           let operator = '='; //get operator >,<,=... from request
+          try {
+            filterValue = JSON.parse(filterValue);
+          } catch (error) { 
+          }
           this.addModelFilter(filter, field, filterValue, operator)
         }
       }
@@ -162,7 +166,11 @@ export class ApiController {
   }
 
   addModelFilter(filter: Filter, field, filterValue, operator) {
-    filter.addOperatorFilter(field, filterValue, operator);
+    if (Array.isArray(filterValue)) {
+      filter.addInValues(field, filterValue);
+    } else {
+      filter.addOperatorFilter(field, filterValue, operator);
+    }
   }
 
   getRequestOrder() {
